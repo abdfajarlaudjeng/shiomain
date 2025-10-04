@@ -117,7 +117,7 @@
 
                     <!-- Validasi Angka Main -->
                     <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Validasi Angka Main</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Validasi Angka Main (Sistem Bertahap)</label>
                         <div class="grid grid-cols-2 gap-2">
                             <input type="text" id="valid1" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Valid 1" maxlength="6">
                             <input type="text" id="valid2" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Valid 2" maxlength="6">
@@ -126,6 +126,7 @@
                             <input type="text" id="valid5" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Valid 5" maxlength="6">
                             <input type="text" id="valid6" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Valid 6" maxlength="6">
                         </div>
+                        <p class="text-xs text-gray-500 mt-2">⚡ Sistem Bertahap: Valid 1 → Valid 2 → Valid 3... (Setiap tahap memangkas hasil sebelumnya)</p>
                     </div>
 
                     <button id="applyFilter" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200">
@@ -435,26 +436,29 @@
                     }
                 }
 
-                // Filter berdasarkan validasi angka
+                // Filter berdasarkan validasi angka - SISTEM BERTAHAP
+                // Setiap validasi akan memangkas hasil dari validasi sebelumnya
                 if (currentFilter.validAngka.length > 0 && shouldShow) {
-                    let hasValidMatch = false;
-                    
-                    for (let validNum of currentFilter.validAngka) {
-                        const validDigits = validNum.split('');
-                        const numberDigits = numberStr.split('');
-                        
-                        for (let digit of validDigits) {
-                            if (numberDigits.includes(digit)) {
-                                hasValidMatch = true;
-                                break;
+                    // Proses validasi secara bertahap
+                    for (let i = 0; i < currentFilter.validAngka.length; i++) {
+                        const validNum = currentFilter.validAngka[i];
+                        if (validNum && shouldShow) {
+                            const validDigits = validNum.split('');
+                            const numberDigits = numberStr.split('');
+                            
+                            let hasMatch = false;
+                            for (let digit of validDigits) {
+                                if (numberDigits.includes(digit)) {
+                                    hasMatch = true;
+                                    break;
+                                }
+                            }
+                            
+                            // Jika tidak ada match pada validasi ini, angka dipangkas
+                            if (!hasMatch) {
+                                shouldShow = false;
                             }
                         }
-                        
-                        if (hasValidMatch) break;
-                    }
-                    
-                    if (!hasValidMatch) {
-                        shouldShow = false;
                     }
                 }
 
@@ -520,5 +524,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9895d3f126287e32',t:'MTc1OTU5Mjk1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'989608ebf19dce3d',t:'MTc1OTU5NTEyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
