@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Tabel Shio Togel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        .shio-cell {
+            transition: all 0.3s ease;
+        }
+        
+        .shio-cell:hover {
+            transform: scale(1.05);
+        }
+        
+        .filtered-out {
+            opacity: 0.3;
+            background-color: #f3f4f6 !important;
+        }
+        
+        .highlight {
+            background-color: #fef3c7 !important;
+            border: 2px solid #f59e0b;
+        }
+        
+        .shio-1 { background-color: #fee2e2; }
+        .shio-2 { background-color: #fef3c7; }
+        .shio-3 { background-color: #ecfdf5; }
+        .shio-4 { background-color: #eff6ff; }
+        .shio-5 { background-color: #f3e8ff; }
+        .shio-6 { background-color: #fdf2f8; }
+        .shio-7 { background-color: #f0f9ff; }
+        .shio-8 { background-color: #f7fee7; }
+        .shio-9 { background-color: #fff7ed; }
+        .shio-10 { background-color: #fef7ff; }
+        .shio-11 { background-color: #f0fdf4; }
+        .shio-12 { background-color: #fefce8; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">🐉 Analisis Tabel Shio Togel</h1>
+            <p class="text-gray-600">Analisis shio berdasarkan ekor dan angka main dengan sistem pangkas</p>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8">
+            <!-- Panel Kontrol -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">🎯 Panel Kontrol</h2>
+                    
+                    <!-- Filter Pasaran -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Pasaran</label>
+                        <select id="pasaranSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="all">Semua Pasaran</option>
+                            <option value="singapore">Singapore</option>
+                            <option value="hongkong">Hongkong</option>
+                            <option value="sydney">Sydney</option>
+                            <option value="cambodia">Cambodia</option>
+                            <option value="china">China</option>
+                            <option value="taiwan">Taiwan</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Ekor -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Filter Ekor</label>
+                        <div class="grid grid-cols-5 gap-2">
+                            <button class="ekor-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-blue-100 focus:ring-2 focus:ring-blue-500" data-ekor="0">0</button>
+                            <button class="ekor-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-blue-100 focus:ring-2 focus:ring-blue-500" data-ekor="1">1</button>
+                            <button class="ekor-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-blue-100 focus:ring-2 focus:ring-blue-500" data-ekor="2">2</button>
+                            <button class="ekor-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-blue-100 focus:ring-2 focus:ring-blue-500" data-ekor="3">3</button>
+                            <button class="ekor-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-blue-100 focus:ring-2 focus:ring-blue-500" data-ekor="4">4</button>
+                            <button class="ekor-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-blue-100 focus:ring-2 focus:ring-blue-500" data-ekor="5">5</button>
+                            <button class="ekor-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-blue-100 focus:ring-2 focus:ring-blue-500" data-ekor="6">6</button>
+                            <button class="ekor-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-blue-100 focus:ring-2 focus:ring-blue-500" data-ekor="7">7</button>
+                            <button class="ekor-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-blue-100 focus:ring-2 focus:ring-blue-500" data-ekor="8">8</button>
+                            <button class="ekor-btn px-3 py-2 border border-gray-300 rounded-lg hover:bg-blue-100 focus:ring-2 focus:ring-blue-500" data-ekor="9">9</button>
+                        </div>
+                        <button id="clearEkor" class="mt-2 w-full px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Clear Ekor</button>
+                    </div>
+
+                    <!-- Filter Shio -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Filter Shio</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-red-100 focus:ring-2 focus:ring-red-500" data-shio="1">🐭 Tikus</button>
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-yellow-100 focus:ring-2 focus:ring-yellow-500" data-shio="2">🐂 Kerbau</button>
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-green-100 focus:ring-2 focus:ring-green-500" data-shio="3">🐅 Harimau</button>
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-blue-100 focus:ring-2 focus:ring-blue-500" data-shio="4">🐰 Kelinci</button>
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-purple-100 focus:ring-2 focus:ring-purple-500" data-shio="5">🐉 Naga</button>
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-pink-100 focus:ring-2 focus:ring-pink-500" data-shio="6">🐍 Ular</button>
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-cyan-100 focus:ring-2 focus:ring-cyan-500" data-shio="7">🐎 Kuda</button>
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-lime-100 focus:ring-2 focus:ring-lime-500" data-shio="8">🐐 Kambing</button>
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-orange-100 focus:ring-2 focus:ring-orange-500" data-shio="9">🐒 Monyet</button>
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-fuchsia-100 focus:ring-2 focus:ring-fuchsia-500" data-shio="10">🐓 Ayam</button>
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-emerald-100 focus:ring-2 focus:ring-emerald-500" data-shio="11">🐕 Anjing</button>
+                            <button class="shio-btn px-2 py-2 text-xs border border-gray-300 rounded-lg hover:bg-amber-100 focus:ring-2 focus:ring-amber-500" data-shio="12">🐷 Babi</button>
+                        </div>
+                        <button id="clearShio" class="mt-2 w-full px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Clear Shio</button>
+                    </div>
+
+                    <!-- Angka Main -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Angka Main (Max 6 digit)</label>
+                        <input type="text" id="angkaMain" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Contoh: 123456" maxlength="6">
+                        <p class="text-xs text-gray-500 mt-1">Masukkan 1-6 digit angka main</p>
+                    </div>
+
+                    <!-- Validasi Angka Main -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Validasi Angka Main (Sistem Bertahap)</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="valid1" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Valid 1" maxlength="6">
+                            <input type="text" id="valid2" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Valid 2" maxlength="6">
+                            <input type="text" id="valid3" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Valid 3" maxlength="6">
+                            <input type="text" id="valid4" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Valid 4" maxlength="6">
+                            <input type="text" id="valid5" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Valid 5" maxlength="6">
+                            <input type="text" id="valid6" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="Valid 6" maxlength="6">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">⚡ Sistem Bertahap: Valid 1 → Valid 2 → Valid 3... (Setiap tahap memangkas hasil sebelumnya)</p>
+                    </div>
+
+                    <button id="applyFilter" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200">
+                        🔍 Terapkan Filter
+                    </button>
+                </div>
+
+                <!-- Input Angka 2D -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">🎯 Input Angka 2D</h3>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Masukkan Angka 2D (pisahkan dengan koma atau spasi)</label>
+                        <textarea id="angka2D" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="4" placeholder="Contoh: 12, 34, 56, 78 atau 12 34 56 78"></textarea>
+                        <p class="text-xs text-gray-500 mt-1">Format: 12, 34, 56 atau 12 34 56</p>
+                    </div>
+                    <button id="validate2D" class="w-full bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200">
+                        ✅ Validasi Angka 2D
+                    </button>
+                    <div id="validationResult" class="mt-4 hidden">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-3">
+                            <h4 class="font-semibold text-green-800 mb-2">Hasil Validasi:</h4>
+                            <div id="matchedNumbers" class="text-sm text-green-700"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistik -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">📊 Statistik</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Total Angka:</span>
+                            <span id="totalAngka" class="font-semibold">100</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Setelah Filter:</span>
+                            <span id="filteredAngka" class="font-semibold text-blue-600">100</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Persentase:</span>
+                            <span id="persentase" class="font-semibold text-green-600">100%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Match 2D:</span>
+                            <span id="match2D" class="font-semibold text-purple-600">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Angka Terpangkas -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">❌ Angka Terpangkas</h3>
+                    <div id="crossedNumbers" class="space-y-3">
+                        <div class="text-sm text-gray-500 text-center py-4">
+                            Belum ada filter yang diterapkan
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel Angka Tersisa -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">✅ Angka Tersisa</h3>
+                    <div id="remainingNumbers" class="space-y-3">
+                        <div class="text-sm text-gray-500 text-center py-4">
+                            Belum ada filter yang diterapkan
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabel Rekap BBFS -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">🎲 Rekap BBFS (Bolak-Balik Full Set)</h3>
+                    <div id="bbfsTable" class="space-y-4">
+                        <div class="text-sm text-gray-500 text-center py-4">
+                            Masukkan Angka Main dan Validasi untuk melihat rekap BBFS
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabel Shio -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-semibold text-gray-800">🐲 Tabel Shio (00-99)</h2>
+                        <div class="text-sm text-gray-600">
+                            <span class="inline-block w-4 h-4 bg-yellow-200 border-2 border-yellow-500 mr-2"></span>
+                            Hasil Filter
+                        </div>
+                    </div>
+                    
+                    <div id="shioTable" class="grid grid-cols-10 gap-2">
+                        <!-- Tabel akan diisi oleh JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Tabel Nomor Sering Keluar 2D -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mt-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">🔥 Nomor 2D Sering Keluar</h3>
+                    
+                    <!-- Tab Navigation -->
+                    <div class="flex space-x-1 mb-4">
+                        <button id="tab2DDepan" class="tab-btn active px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-medium">2D Depan</button>
+                        <button id="tab2DTengah" class="tab-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-300">2D Tengah</button>
+                        <button id="tab2DBelakang" class="tab-btn px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-300">2D Belakang</button>
+                    </div>
+
+                    <!-- 2D Depan -->
+                    <div id="content2DDepan" class="tab-content">
+                        <h4 class="font-semibold text-gray-700 mb-3">Top 20 Nomor 2D Depan Terpanas 🔥</h4>
+                        <div class="grid grid-cols-5 gap-2">
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">12</div>
+                                <div class="text-xs text-red-600">45x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">34</div>
+                                <div class="text-xs text-red-600">42x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">56</div>
+                                <div class="text-xs text-red-600">41x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">78</div>
+                                <div class="text-xs text-red-600">39x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">90</div>
+                                <div class="text-xs text-red-600">38x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">23</div>
+                                <div class="text-xs text-orange-600">37x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">45</div>
+                                <div class="text-xs text-orange-600">36x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">67</div>
+                                <div class="text-xs text-orange-600">35x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">89</div>
+                                <div class="text-xs text-orange-600">34x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">01</div>
+                                <div class="text-xs text-orange-600">33x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">13</div>
+                                <div class="text-xs text-yellow-600">32x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">35</div>
+                                <div class="text-xs text-yellow-600">31x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">57</div>
+                                <div class="text-xs text-yellow-600">30x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">79</div>
+                                <div class="text-xs text-yellow-600">29x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">02</div>
+                                <div class="text-xs text-yellow-600">28x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">24</div>
+                                <div class="text-xs text-green-600">27x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">46</div>
+                                <div class="text-xs text-green-600">26x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">68</div>
+                                <div class="text-xs text-green-600">25x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">80</div>
+                                <div class="text-xs text-green-600">24x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">14</div>
+                                <div class="text-xs text-green-600">23x</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2D Tengah -->
+                    <div id="content2DTengah" class="tab-content hidden">
+                        <h4 class="font-semibold text-gray-700 mb-3">Top 20 Nomor 2D Tengah Terpanas 🔥</h4>
+                        <div class="grid grid-cols-5 gap-2">
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">25</div>
+                                <div class="text-xs text-red-600">48x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">47</div>
+                                <div class="text-xs text-red-600">44x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">69</div>
+                                <div class="text-xs text-red-600">43x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">81</div>
+                                <div class="text-xs text-red-600">41x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">03</div>
+                                <div class="text-xs text-red-600">40x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">36</div>
+                                <div class="text-xs text-orange-600">39x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">58</div>
+                                <div class="text-xs text-orange-600">38x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">70</div>
+                                <div class="text-xs text-orange-600">37x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">92</div>
+                                <div class="text-xs text-orange-600">36x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">14</div>
+                                <div class="text-xs text-orange-600">35x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">27</div>
+                                <div class="text-xs text-yellow-600">34x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">49</div>
+                                <div class="text-xs text-yellow-600">33x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">61</div>
+                                <div class="text-xs text-yellow-600">32x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">83</div>
+                                <div class="text-xs text-yellow-600">31x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">05</div>
+                                <div class="text-xs text-yellow-600">30x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">18</div>
+                                <div class="text-xs text-green-600">29x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">30</div>
+                                <div class="text-xs text-green-600">28x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">52</div>
+                                <div class="text-xs text-green-600">27x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">74</div>
+                                <div class="text-xs text-green-600">26x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">96</div>
+                                <div class="text-xs text-green-600">25x</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2D Belakang -->
+                    <div id="content2DBelakang" class="tab-content hidden">
+                        <h4 class="font-semibold text-gray-700 mb-3">Top 20 Nomor 2D Belakang Terpanas 🔥</h4>
+                        <div class="grid grid-cols-5 gap-2">
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">17</div>
+                                <div class="text-xs text-red-600">52x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">39</div>
+                                <div class="text-xs text-red-600">49x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">51</div>
+                                <div class="text-xs text-red-600">47x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">73</div>
+                                <div class="text-xs text-red-600">45x</div>
+                            </div>
+                            <div class="bg-red-100 border border-red-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-red-800">95</div>
+                                <div class="text-xs text-red-600">44x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">28</div>
+                                <div class="text-xs text-orange-600">42x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">40</div>
+                                <div class="text-xs text-orange-600">41x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">62</div>
+                                <div class="text-xs text-orange-600">40x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">84</div>
+                                <div class="text-xs text-orange-600">39x</div>
+                            </div>
+                            <div class="bg-orange-100 border border-orange-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-orange-800">06</div>
+                                <div class="text-xs text-orange-600">38x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">19</div>
+                                <div class="text-xs text-yellow-600">37x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">31</div>
+                                <div class="text-xs text-yellow-600">36x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">53</div>
+                                <div class="text-xs text-yellow-600">35x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">75</div>
+                                <div class="text-xs text-yellow-600">34x</div>
+                            </div>
+                            <div class="bg-yellow-100 border border-yellow-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-yellow-800">97</div>
+                                <div class="text-xs text-yellow-600">33x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">20</div>
+                                <div class="text-xs text-green-600">32x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">42</div>
+                                <div class="text-xs text-green-600">31x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">64</div>
+                                <div class="text-xs text-green-600">30x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">86</div>
+                                <div class="text-xs text-green-600">29x</div>
+                            </div>
+                            <div class="bg-green-100 border border-green-300 rounded-lg p-2 text-center">
+                                <div class="font-bold text-green-800">08</div>
+                                <div class="text-xs text-green-600">28x</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Legenda Shio -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mt-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">🎨 Legenda Shio</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-1 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐭 Tikus</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-2 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐂 Kerbau</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-3 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐅 Harimau</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-4 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐰 Kelinci</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-5 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐉 Naga</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-6 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐍 Ular</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-7 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐎 Kuda</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-8 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐐 Kambing</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-9 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐒 Monyet</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-10 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐓 Ayam</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-11 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐕 Anjing</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 shio-12 border border-gray-300 rounded"></div>
+                            <span class="text-sm">🐷 Babi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data shio berdasarkan angka
+        const shioData = {
+            1: [1, 13, 25, 37, 49, 61, 73, 85, 97], // Tikus
+            2: [2, 14, 26, 38, 50, 62, 74, 86, 98], // Kerbau
+            3: [3, 15, 27, 39, 51, 63, 75, 87, 99], // Harimau
+            4: [4, 16, 28, 40, 52, 64, 76, 88, 0],  // Kelinci
+            5: [5, 17, 29, 41, 53, 65, 77, 89],     // Naga
+            6: [6, 18, 30, 42, 54, 66, 78, 90],     // Ular
+            7: [7, 19, 31, 43, 55, 67, 79, 91],     // Kuda
+            8: [8, 20, 32, 44, 56, 68, 80, 92],     // Kambing
+            9: [9, 21, 33, 45, 57, 69, 81, 93],     // Monyet
+            10: [10, 22, 34, 46, 58, 70, 82, 94],   // Ayam
+            11: [11, 23, 35, 47, 59, 71, 83, 95],   // Anjing
+            12: [12, 24, 36, 48, 60, 72, 84, 96]    // Babi
+        };
+
+        // Data frekuensi shio (simulasi data sering keluar)
+        const shioFrequency = {
+            singapore: { 1: 15, 2: 12, 3: 18, 4: 14, 5: 20, 6: 16, 7: 13, 8: 17, 9: 19, 10: 11, 11: 15, 12: 14 },
+            hongkong: { 1: 17, 2: 14, 3: 16, 4: 18, 5: 15, 6: 19, 7: 12, 8: 16, 9: 14, 10: 17, 11: 13, 12: 15 },
+            sydney: { 1: 16, 2: 15, 3: 14, 4: 17, 5: 18, 6: 13, 7: 19, 8: 12, 9: 16, 10: 15, 11: 17, 12: 14 },
+            cambodia: { 1: 14, 2: 16, 3: 17, 4: 15, 5: 13, 6: 18, 7: 16, 8: 19, 9: 12, 10: 14, 11: 16, 12: 17 },
+            china: { 1: 18, 2: 13, 3: 15, 4: 16, 5: 17, 6: 14, 7: 15, 8: 18, 9: 16, 10: 19, 11: 12, 12: 13 },
+            taiwan: { 1: 15, 2: 17, 3: 13, 4: 19, 5: 14, 6: 16, 7: 18, 8: 15, 9: 17, 10: 12, 11: 14, 12: 16 }
+        };
+
+        // Data nomor 2D sering keluar
+        const hotNumbers2D = {
+            depan: ['12', '34', '56', '78', '90', '23', '45', '67', '89', '01', '13', '35', '57', '79', '02', '24', '46', '68', '80', '14'],
+            tengah: ['25', '47', '69', '81', '03', '36', '58', '70', '92', '14', '27', '49', '61', '83', '05', '18', '30', '52', '74', '96'],
+            belakang: ['17', '39', '51', '73', '95', '28', '40', '62', '84', '06', '19', '31', '53', '75', '97', '20', '42', '64', '86', '08']
+        };
+
+        let selectedEkor = [];
+        let selectedShio = [];
+        let input2DNumbers = [];
+        let crossedNumbersData = {
+            angkaMain: [],
+            valid1: [],
+            valid2: [],
+            valid3: [],
+            valid4: [],
+            valid5: [],
+            valid6: []
+        };
+        let remainingNumbersData = {
+            initial: [],
+            afterAngkaMain: [],
+            afterValid1: [],
+            afterValid2: [],
+            afterValid3: [],
+            afterValid4: [],
+            afterValid5: [],
+            afterValid6: []
+        };
+        let currentFilter = {
+            pasaran: 'all',
+            ekor: [],
+            shio: [],
+            angkaMain: '',
+            validAngka: [],
+            input2D: []
+        };
+
+        // Inisialisasi tabel
+        function initTable() {
+            const table = document.getElementById('shioTable');
+            table.innerHTML = '';
+
+            for (let i = 0; i <= 99; i++) {
+                const cell = document.createElement('div');
+                const num = i.toString().padStart(2, '0');
+                const shioNum = getShioNumber(i);
+                
+                cell.className = `shio-cell shio-${shioNum} border border-gray-300 rounded-lg p-3 text-center font-semibold cursor-pointer hover:shadow-lg`;
+                cell.innerHTML = `
+                    <div class="text-lg">${num}</div>
+                    <div class="text-xs text-gray-600">Shio ${shioNum}</div>
+                `;
+                cell.dataset.number = i;
+                cell.dataset.shio = shioNum;
+                
+                table.appendChild(cell);
+            }
+        }
+
+        // Mendapatkan nomor shio berdasarkan angka
+        function getShioNumber(num) {
+            for (let shio = 1; shio <= 12; shio++) {
+                if (shioData[shio].includes(num)) {
+                    return shio;
+                }
+            }
+            return 1; // default
+        }
+
+        // Handle filter ekor
+        document.querySelectorAll('.ekor-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const ekor = this.dataset.ekor;
+                
+                if (this.classList.contains('bg-blue-500')) {
+                    // Remove from selection
+                    this.classList.remove('bg-blue-500', 'text-white');
+                    this.classList.add('border-gray-300');
+                    selectedEkor = selectedEkor.filter(e => e !== ekor);
+                } else {
+                    // Add to selection
+                    this.classList.add('bg-blue-500', 'text-white');
+                    this.classList.remove('border-gray-300');
+                    selectedEkor.push(ekor);
+                }
+            });
+        });
+
+        // Clear ekor selection
+        document.getElementById('clearEkor').addEventListener('click', function() {
+            selectedEkor = [];
+            document.querySelectorAll('.ekor-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-500', 'text-white');
+                btn.classList.add('border-gray-300');
+            });
+        });
+
+        // Handle filter shio
+        document.querySelectorAll('.shio-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const shio = this.dataset.shio;
+                
+                if (this.classList.contains('bg-green-500')) {
+                    // Remove from selection
+                    this.classList.remove('bg-green-500', 'text-white');
+                    this.classList.add('border-gray-300');
+                    selectedShio = selectedShio.filter(s => s !== shio);
+                } else {
+                    // Add to selection
+                    this.classList.add('bg-green-500', 'text-white');
+                    this.classList.remove('border-gray-300');
+                    selectedShio.push(shio);
+                }
+            });
+        });
+
+        // Clear shio selection
+        document.getElementById('clearShio').addEventListener('click', function() {
+            selectedShio = [];
+            document.querySelectorAll('.shio-btn').forEach(btn => {
+                btn.classList.remove('bg-green-500', 'text-white');
+                btn.classList.add('border-gray-300');
+            });
+        });
+
+        // Validasi input angka main
+        document.getElementById('angkaMain').addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        // Validasi input kolom validasi
+        for (let i = 1; i <= 6; i++) {
+            document.getElementById(`valid${i}`).addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+
+        // Terapkan filter
+        document.getElementById('applyFilter').addEventListener('click', function() {
+            applyFilters();
+        });
+
+        function applyFilters() {
+            const pasaran = document.getElementById('pasaranSelect').value;
+            const angkaMain = document.getElementById('angkaMain').value;
+            const validAngka = [];
+            
+            // Kumpulkan angka validasi
+            for (let i = 1; i <= 6; i++) {
+                const val = document.getElementById(`valid${i}`).value;
+                if (val) validAngka.push(val);
+            }
+
+            currentFilter = {
+                pasaran,
+                ekor: [...selectedEkor],
+                shio: [...selectedShio],
+                angkaMain,
+                validAngka
+            };
+
+            filterTable();
+            updateStatistics();
+        }
+
+        function filterTable() {
+            const cells = document.querySelectorAll('.shio-cell');
+            let filteredCount = 0;
+            
+            // Reset crossed numbers data
+            crossedNumbersData = {
+                angkaMain: [],
+                valid1: [],
+                valid2: [],
+                valid3: [],
+                valid4: [],
+                valid5: [],
+                valid6: []
+            };
+
+            // Reset remaining numbers data
+            remainingNumbersData = {
+                initial: [],
+                afterAngkaMain: [],
+                afterValid1: [],
+                afterValid2: [],
+                afterValid3: [],
+                afterValid4: [],
+                afterValid5: [],
+                afterValid6: []
+            };
+
+            // Initialize with all numbers
+            for (let i = 0; i <= 99; i++) {
+                remainingNumbersData.initial.push(i.toString().padStart(2, '0'));
+            }
+
+            // Track remaining numbers after each filter stage
+            let currentRemaining = [...remainingNumbersData.initial];
+
+            // Apply filters step by step and track remaining numbers
+            
+            // Step 1: Filter by Ekor and Shio (basic filters)
+            currentRemaining = currentRemaining.filter(numberStr => {
+                const number = parseInt(numberStr);
+                
+                // Filter ekor
+                if (currentFilter.ekor.length > 0) {
+                    const ekor = number % 10;
+                    if (!currentFilter.ekor.includes(ekor.toString())) {
+                        return false;
+                    }
+                }
+                
+                // Filter shio
+                if (currentFilter.shio.length > 0) {
+                    const shioNum = getShioNumber(number);
+                    if (!currentFilter.shio.includes(shioNum.toString())) {
+                        return false;
+                    }
+                }
+                
+                return true;
+            });
+
+            // Step 2: Filter by Angka Main
+            if (currentFilter.angkaMain) {
+                const beforeAngkaMain = [...currentRemaining];
+                currentRemaining = currentRemaining.filter(numberStr => {
+                    const mainDigits = currentFilter.angkaMain.split('');
+                    const numberDigits = numberStr.split('');
+                    
+                    for (let digit of mainDigits) {
+                        if (numberDigits.includes(digit)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+                
+                // Track crossed numbers
+                crossedNumbersData.angkaMain = beforeAngkaMain.filter(num => !currentRemaining.includes(num));
+                remainingNumbersData.afterAngkaMain = [...currentRemaining];
+            } else {
+                remainingNumbersData.afterAngkaMain = [...currentRemaining];
+            }
+
+            // Step 3-8: Filter by Valid 1-6 (bertahap)
+            for (let i = 0; i < currentFilter.validAngka.length; i++) {
+                const validNum = currentFilter.validAngka[i];
+                if (validNum) {
+                    const beforeValid = [...currentRemaining];
+                    currentRemaining = currentRemaining.filter(numberStr => {
+                        const validDigits = validNum.split('');
+                        const numberDigits = numberStr.split('');
+                        
+                        for (let digit of validDigits) {
+                            if (numberDigits.includes(digit)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+                    
+                    // Track crossed and remaining numbers
+                    const validKey = `valid${i + 1}`;
+                    crossedNumbersData[validKey] = beforeValid.filter(num => !currentRemaining.includes(num));
+                    remainingNumbersData[`after${validKey.charAt(0).toUpperCase() + validKey.slice(1)}`] = [...currentRemaining];
+                }
+            }
+
+            // Apply visual styling to cells
+            cells.forEach(cell => {
+                const number = parseInt(cell.dataset.number);
+                const numberStr = number.toString().padStart(2, '0');
+
+                // Reset special 2D highlighting
+                cell.classList.remove('border-4', 'border-purple-500');
+
+                if (currentRemaining.includes(numberStr)) {
+                    cell.classList.remove('filtered-out');
+                    cell.classList.add('highlight');
+                    filteredCount++;
+                    
+                    // Add special highlight for 2D matches
+                    if (input2DNumbers.includes(numberStr)) {
+                        cell.classList.add('border-4', 'border-purple-500');
+                    }
+                } else {
+                    cell.classList.add('filtered-out');
+                    cell.classList.remove('highlight');
+                }
+            });
+
+            updateCrossedNumbersDisplay();
+            updateRemainingNumbersDisplay();
+            updateBBFSTable();
+            return filteredCount;
+        }
+
+        function updateStatistics() {
+            const total = 100;
+            const filtered = document.querySelectorAll('.shio-cell.highlight').length;
+            const percentage = ((filtered / total) * 100).toFixed(1);
+            const match2D = countMatched2D();
+
+            document.getElementById('totalAngka').textContent = total;
+            document.getElementById('filteredAngka').textContent = filtered;
+            document.getElementById('persentase').textContent = `${percentage}%`;
+            document.getElementById('match2D').textContent = match2D;
+        }
+
+        // Fungsi untuk menghitung match 2D
+        function countMatched2D() {
+            if (input2DNumbers.length === 0) return 0;
+            
+            const highlightedCells = document.querySelectorAll('.shio-cell.highlight');
+            let matchCount = 0;
+            
+            highlightedCells.forEach(cell => {
+                const number = parseInt(cell.dataset.number);
+                const numberStr = number.toString().padStart(2, '0');
+                
+                if (input2DNumbers.includes(numberStr)) {
+                    matchCount++;
+                }
+            });
+            
+            return matchCount;
+        }
+
+        // Handle tab switching untuk 2D
+        function initTabs() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-blue-500', 'text-white');
+                        btn.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+
+                    // Add active class to clicked button
+                    this.classList.add('active', 'bg-blue-500', 'text-white');
+                    this.classList.remove('bg-gray-200', 'text-gray-700');
+
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+
+                    // Show corresponding content
+                    const targetId = this.id.replace('tab', 'content');
+                    document.getElementById(targetId).classList.remove('hidden');
+                });
+            });
+        }
+
+        // Validasi input 2D
+        function validate2DInput() {
+            const input = document.getElementById('angka2D').value;
+            const validationResult = document.getElementById('validationResult');
+            const matchedNumbers = document.getElementById('matchedNumbers');
+
+            if (!input.trim()) {
+                validationResult.classList.add('hidden');
+                input2DNumbers = [];
+                currentFilter.input2D = [];
+                updateStatistics();
+                return;
+            }
+
+            // Parse input - support comma and space separation
+            const numbers = input.replace(/[^\d\s,]/g, '') // Remove non-digit, non-space, non-comma
+                                .split(/[\s,]+/) // Split by space or comma
+                                .filter(num => num.length === 2) // Only 2-digit numbers
+                                .map(num => num.padStart(2, '0')); // Ensure 2 digits
+
+            input2DNumbers = [...new Set(numbers)]; // Remove duplicates
+            currentFilter.input2D = [...input2DNumbers];
+
+            // Find matches with current filtered results
+            const highlightedCells = document.querySelectorAll('.shio-cell.highlight');
+            const matches = [];
+
+            highlightedCells.forEach(cell => {
+                const number = parseInt(cell.dataset.number);
+                const numberStr = number.toString().padStart(2, '0');
+                
+                if (input2DNumbers.includes(numberStr)) {
+                    matches.push(numberStr);
+                    // Add special highlight for matched 2D numbers
+                    cell.classList.add('border-4', 'border-purple-500');
+                }
+            });
+
+            // Show validation result
+            if (matches.length > 0) {
+                validationResult.classList.remove('hidden');
+                matchedNumbers.innerHTML = `
+                    <strong>Angka yang cocok (${matches.length}):</strong><br>
+                    ${matches.map(num => `<span class="inline-block bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs font-semibold mr-1 mb-1">${num}</span>`).join('')}
+                    <br><br>
+                    <strong>Total input:</strong> ${input2DNumbers.length} angka<br>
+                    <strong>Tingkat kecocokan:</strong> ${((matches.length / input2DNumbers.length) * 100).toFixed(1)}%
+                `;
+            } else {
+                validationResult.classList.remove('hidden');
+                matchedNumbers.innerHTML = `
+                    <div class="text-orange-700">
+                        <strong>Tidak ada angka yang cocok</strong><br>
+                        Total input: ${input2DNumbers.length} angka<br>
+                        Coba sesuaikan filter atau masukkan angka lain.
+                    </div>
+                `;
+            }
+
+            updateStatistics();
+        }
+
+        // Reset semua filter
+        function resetFilters() {
+            selectedEkor = [];
+            selectedShio = [];
+            
+            document.querySelectorAll('.ekor-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-500', 'text-white');
+                btn.classList.add('border-gray-300');
+            });
+            
+            document.querySelectorAll('.shio-btn').forEach(btn => {
+                btn.classList.remove('bg-green-500', 'text-white');
+                btn.classList.add('border-gray-300');
+            });
+            
+            document.getElementById('angkaMain').value = '';
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`valid${i}`).value = '';
+            }
+            
+            document.querySelectorAll('.shio-cell').forEach(cell => {
+                cell.classList.remove('filtered-out', 'highlight');
+            });
+            
+            updateStatistics();
+        }
+
+        // Event listener untuk validasi 2D
+        document.getElementById('validate2D').addEventListener('click', validate2DInput);
+        
+        // Auto-validate saat mengetik (dengan debounce)
+        let debounceTimer;
+        document.getElementById('angka2D').addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(validate2DInput, 500);
+        });
+
+        // Fungsi untuk menampilkan angka yang terpangkas
+        function updateCrossedNumbersDisplay() {
+            const crossedContainer = document.getElementById('crossedNumbers');
+            let html = '';
+
+            // Check if any filters are applied
+            const hasFilters = currentFilter.angkaMain || currentFilter.validAngka.length > 0;
+            
+            if (!hasFilters) {
+                html = '<div class="text-sm text-gray-500 text-center py-4">Belum ada filter yang diterapkan</div>';
+            } else {
+                // Angka Main
+                if (crossedNumbersData.angkaMain.length > 0) {
+                    html += `
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-red-700 mb-2">🎯 Terpangkas oleh Angka Main (${currentFilter.angkaMain}):</h4>
+                            <div class="flex flex-wrap gap-1">
+                                ${crossedNumbersData.angkaMain.map(num => 
+                                    `<span class="inline-block bg-red-100 text-red-800 px-2 py-1 rounded text-xs font-semibold">${num}</span>`
+                                ).join('')}
+                            </div>
+                            <div class="text-xs text-red-600 mt-1">Total: ${crossedNumbersData.angkaMain.length} angka</div>
+                        </div>
+                    `;
+                }
+
+                // Valid 1-6
+                for (let i = 1; i <= 6; i++) {
+                    const validKey = `valid${i}`;
+                    const validValue = document.getElementById(validKey).value;
+                    
+                    if (crossedNumbersData[validKey].length > 0 && validValue) {
+                        const colors = {
+                            valid1: { bg: 'bg-orange-100', text: 'text-orange-800', textLight: 'text-orange-600' },
+                            valid2: { bg: 'bg-yellow-100', text: 'text-yellow-800', textLight: 'text-yellow-600' },
+                            valid3: { bg: 'bg-green-100', text: 'text-green-800', textLight: 'text-green-600' },
+                            valid4: { bg: 'bg-blue-100', text: 'text-blue-800', textLight: 'text-blue-600' },
+                            valid5: { bg: 'bg-purple-100', text: 'text-purple-800', textLight: 'text-purple-600' },
+                            valid6: { bg: 'bg-pink-100', text: 'text-pink-800', textLight: 'text-pink-600' }
+                        };
+                        
+                        const color = colors[validKey];
+                        
+                        html += `
+                            <div class="mb-4">
+                                <h4 class="font-semibold ${color.textLight} mb-2">✅ Terpangkas oleh Valid ${i} (${validValue}):</h4>
+                                <div class="flex flex-wrap gap-1">
+                                    ${crossedNumbersData[validKey].map(num => 
+                                        `<span class="inline-block ${color.bg} ${color.text} px-2 py-1 rounded text-xs font-semibold">${num}</span>`
+                                    ).join('')}
+                                </div>
+                                <div class="text-xs ${color.textLight} mt-1">Total: ${crossedNumbersData[validKey].length} angka</div>
+                            </div>
+                        `;
+                    }
+                }
+
+                // Summary
+                const totalCrossed = Object.values(crossedNumbersData).reduce((sum, arr) => sum + arr.length, 0);
+                if (totalCrossed > 0) {
+                    html += `
+                        <div class="border-t pt-3 mt-4">
+                            <div class="text-sm font-semibold text-gray-700">
+                                📊 Total Angka Terpangkas: <span class="text-red-600">${totalCrossed}</span>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">
+                                Sistem bertahap: Angka Main → Valid 1 → Valid 2 → Valid 3 → Valid 4 → Valid 5 → Valid 6
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            crossedContainer.innerHTML = html;
+        }
+
+        // Fungsi untuk membuat rekap BBFS
+        function updateBBFSTable() {
+            const bbfsContainer = document.getElementById('bbfsTable');
+            let html = '';
+
+            // Check if any filters are applied
+            const hasFilters = currentFilter.angkaMain || currentFilter.validAngka.length > 0;
+            
+            if (!hasFilters) {
+                html = '<div class="text-sm text-gray-500 text-center py-4">Masukkan Angka Main dan Validasi untuk melihat rekap BBFS</div>';
+            } else {
+                html += '<div class="overflow-x-auto">';
+                html += '<table class="w-full border-collapse border border-gray-300 text-sm">';
+                
+                // Header
+                html += `
+                    <thead>
+                        <tr class="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                            <th class="border border-gray-300 px-3 py-2 text-left">Filter Stage</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">BBFS Input</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">Jumlah Angka</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">Digit Unik</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">Kombinasi 2D</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+
+                // Angka Main
+                if (currentFilter.angkaMain) {
+                    const uniqueDigits = [...new Set(currentFilter.angkaMain.split(''))].sort();
+                    const combinations2D = generateCombinations2D(uniqueDigits);
+                    const bbfsText = `*${remainingNumbersData.afterAngkaMain.join('*')}*`;
+                    
+                    html += `
+                        <tr class="hover:bg-green-50">
+                            <td class="border border-gray-300 px-3 py-2 font-semibold text-green-700">
+                                🎯 Angka Main
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center font-mono bg-green-50">
+                                <span class="bg-green-200 px-2 py-1 rounded">${currentFilter.angkaMain}</span>
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center font-semibold">
+                                ${remainingNumbersData.afterAngkaMain.length}
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center">
+                                <div class="flex flex-wrap gap-1 justify-center">
+                                    ${uniqueDigits.map(digit => 
+                                        `<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold">${digit}</span>`
+                                    ).join('')}
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">${uniqueDigits.length} digit</div>
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center">
+                                <div class="max-h-20 overflow-y-auto">
+                                    <div class="flex flex-wrap gap-1 justify-center">
+                                        ${combinations2D.slice(0, 10).map(combo => 
+                                            `<span class="bg-purple-100 text-purple-800 px-1 py-0.5 rounded text-xs">${combo}</span>`
+                                        ).join('')}
+                                        ${combinations2D.length > 10 ? `<span class="text-xs text-gray-500">+${combinations2D.length - 10} lagi</span>` : ''}
+                                    </div>
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">${combinations2D.length} kombinasi</div>
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center">
+                                <button onclick="copyToClipboard('${bbfsText}', this)" class="px-2 py-1 bg-green-500 hover:bg-green-600 text-white text-xs rounded transition-colors">
+                                    📋 Salin
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+
+                // Valid 1-6
+                for (let i = 1; i <= 6; i++) {
+                    const validKey = `afterValid${i}`;
+                    const validValue = document.getElementById(`valid${i}`).value;
+                    
+                    if (remainingNumbersData[validKey] && remainingNumbersData[validKey].length > 0 && validValue) {
+                        const uniqueDigits = [...new Set(validValue.split(''))].sort();
+                        const combinations2D = generateCombinations2D(uniqueDigits);
+                        const bbfsText = `*${remainingNumbersData[validKey].join('*')}*`;
+                        
+                        const colors = {
+                            1: { bg: 'bg-orange-50', text: 'text-orange-700', badge: 'bg-orange-200', btn: 'bg-orange-500 hover:bg-orange-600' },
+                            2: { bg: 'bg-yellow-50', text: 'text-yellow-700', badge: 'bg-yellow-200', btn: 'bg-yellow-500 hover:bg-yellow-600' },
+                            3: { bg: 'bg-emerald-50', text: 'text-emerald-700', badge: 'bg-emerald-200', btn: 'bg-emerald-500 hover:bg-emerald-600' },
+                            4: { bg: 'bg-blue-50', text: 'text-blue-700', badge: 'bg-blue-200', btn: 'bg-blue-500 hover:bg-blue-600' },
+                            5: { bg: 'bg-purple-50', text: 'text-purple-700', badge: 'bg-purple-200', btn: 'bg-purple-500 hover:bg-purple-600' },
+                            6: { bg: 'bg-pink-50', text: 'text-pink-700', badge: 'bg-pink-200', btn: 'bg-pink-500 hover:bg-pink-600' }
+                        };
+                        
+                        const color = colors[i];
+                        
+                        html += `
+                            <tr class="hover:${color.bg}">
+                                <td class="border border-gray-300 px-3 py-2 font-semibold ${color.text}">
+                                    ✅ Valid ${i}
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-mono ${color.bg}">
+                                    <span class="${color.badge} px-2 py-1 rounded">${validValue}</span>
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-semibold">
+                                    ${remainingNumbersData[validKey].length}
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <div class="flex flex-wrap gap-1 justify-center">
+                                        ${uniqueDigits.map(digit => 
+                                            `<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold">${digit}</span>`
+                                        ).join('')}
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">${uniqueDigits.length} digit</div>
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <div class="max-h-20 overflow-y-auto">
+                                        <div class="flex flex-wrap gap-1 justify-center">
+                                            ${combinations2D.slice(0, 10).map(combo => 
+                                                `<span class="bg-purple-100 text-purple-800 px-1 py-0.5 rounded text-xs">${combo}</span>`
+                                            ).join('')}
+                                            ${combinations2D.length > 10 ? `<span class="text-xs text-gray-500">+${combinations2D.length - 10} lagi</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">${combinations2D.length} kombinasi</div>
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <button onclick="copyToClipboard('${bbfsText}', this)" class="px-2 py-1 ${color.btn} text-white text-xs rounded transition-colors">
+                                        📋 Salin
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }
+                }
+
+                html += '</tbody></table></div>';
+
+                // Summary BBFS
+                const finalRemaining = Object.values(remainingNumbersData).filter(arr => arr.length > 0);
+                if (finalRemaining.length > 0) {
+                    const lastStage = finalRemaining[finalRemaining.length - 1];
+                    const allDigitsUsed = new Set();
+                    
+                    // Kumpulkan semua digit yang digunakan
+                    if (currentFilter.angkaMain) {
+                        currentFilter.angkaMain.split('').forEach(d => allDigitsUsed.add(d));
+                    }
+                    currentFilter.validAngka.forEach(valid => {
+                        if (valid) valid.split('').forEach(d => allDigitsUsed.add(d));
+                    });
+                    
+                    const uniqueDigitsAll = [...allDigitsUsed].sort();
+                    const totalCombinations2D = generateCombinations2D(uniqueDigitsAll);
+                    
+                    html += `
+                        <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border">
+                            <h4 class="font-bold text-gray-800 mb-3">📊 Ringkasan BBFS Final</h4>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <div class="text-2xl font-bold text-blue-600">${lastStage.length}</div>
+                                    <div class="text-xs text-gray-600">Angka Tersisa</div>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <div class="text-2xl font-bold text-green-600">${uniqueDigitsAll.length}</div>
+                                    <div class="text-xs text-gray-600">Digit Unik</div>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <div class="text-2xl font-bold text-purple-600">${totalCombinations2D.length}</div>
+                                    <div class="text-xs text-gray-600">Kombinasi 2D</div>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <div class="text-2xl font-bold text-orange-600">${((lastStage.length/100)*100).toFixed(1)}%</div>
+                                    <div class="text-xs text-gray-600">Efisiensi</div>
+                                </div>
+                            </div>
+                            <div class="mt-3 text-center">
+                                <div class="text-sm text-gray-700 mb-2">
+                                    <strong>Digit BBFS:</strong> 
+                                    ${uniqueDigitsAll.map(digit => 
+                                        `<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold mx-0.5">${digit}</span>`
+                                    ).join('')}
+                                </div>
+                                <div class="text-xs text-gray-500">
+                                    Sistem bertahap mengoptimalkan dari ${uniqueDigitsAll.length} digit menjadi ${lastStage.length} angka final
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            bbfsContainer.innerHTML = html;
+        }
+
+        // Fungsi untuk generate kombinasi 2D dari digit
+        function generateCombinations2D(digits) {
+            const combinations = [];
+            
+            // Generate all possible 2-digit combinations
+            for (let i = 0; i < digits.length; i++) {
+                for (let j = 0; j < digits.length; j++) {
+                    const combo = digits[i] + digits[j];
+                    if (!combinations.includes(combo)) {
+                        combinations.push(combo);
+                    }
+                }
+            }
+            
+            return combinations.sort();
+        }
+
+        // Fungsi untuk menampilkan angka yang tersisa
+        function updateRemainingNumbersDisplay() {
+            const remainingContainer = document.getElementById('remainingNumbers');
+            let html = '';
+
+            // Check if any filters are applied
+            const hasFilters = currentFilter.angkaMain || currentFilter.validAngka.length > 0;
+            
+            if (!hasFilters) {
+                html = '<div class="text-sm text-gray-500 text-center py-4">Belum ada filter yang diterapkan</div>';
+            } else {
+                // Setelah Angka Main
+                if (currentFilter.angkaMain && remainingNumbersData.afterAngkaMain.length > 0) {
+                    const numbersText = `*${remainingNumbersData.afterAngkaMain.join('*')}*`;
+                    html += `
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-semibold text-green-700">🎯 Setelah Filter Angka Main (${currentFilter.angkaMain}):</h4>
+                                <button onclick="copyToClipboard('${numbersText}', this)" class="px-2 py-1 bg-green-500 hover:bg-green-600 text-white text-xs rounded transition-colors">
+                                    📋 Salin
+                                </button>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded border text-sm font-mono break-all">
+                                ${numbersText}
+                            </div>
+                            <div class="flex flex-wrap gap-1 max-h-32 overflow-y-auto mt-2">
+                                ${remainingNumbersData.afterAngkaMain.map(num => 
+                                    `<span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-semibold">${num}</span>`
+                                ).join('')}
+                            </div>
+                            <div class="text-xs text-green-600 mt-1">Tersisa: ${remainingNumbersData.afterAngkaMain.length} angka</div>
+                        </div>
+                    `;
+                }
+
+                // Setelah Valid 1-6
+                for (let i = 1; i <= 6; i++) {
+                    const validKey = `afterValid${i}`;
+                    const validValue = document.getElementById(`valid${i}`).value;
+                    
+                    if (remainingNumbersData[validKey] && remainingNumbersData[validKey].length > 0 && validValue) {
+                        const colors = {
+                            afterValid1: { bg: 'bg-orange-100', text: 'text-orange-800', textLight: 'text-orange-600', btn: 'bg-orange-500 hover:bg-orange-600' },
+                            afterValid2: { bg: 'bg-yellow-100', text: 'text-yellow-800', textLight: 'text-yellow-600', btn: 'bg-yellow-500 hover:bg-yellow-600' },
+                            afterValid3: { bg: 'bg-emerald-100', text: 'text-emerald-800', textLight: 'text-emerald-600', btn: 'bg-emerald-500 hover:bg-emerald-600' },
+                            afterValid4: { bg: 'bg-blue-100', text: 'text-blue-800', textLight: 'text-blue-600', btn: 'bg-blue-500 hover:bg-blue-600' },
+                            afterValid5: { bg: 'bg-purple-100', text: 'text-purple-800', textLight: 'text-purple-600', btn: 'bg-purple-500 hover:bg-purple-600' },
+                            afterValid6: { bg: 'bg-pink-100', text: 'text-pink-800', textLight: 'text-pink-600', btn: 'bg-pink-500 hover:bg-pink-600' }
+                        };
+                        
+                        const color = colors[validKey];
+                        const numbersText = `*${remainingNumbersData[validKey].join('*')}*`;
+                        
+                        html += `
+                            <div class="mb-4">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="font-semibold ${color.textLight}">✅ Setelah Filter Valid ${i} (${validValue}):</h4>
+                                    <button onclick="copyToClipboard('${numbersText}', this)" class="px-2 py-1 ${color.btn} text-white text-xs rounded transition-colors">
+                                        📋 Salin
+                                    </button>
+                                </div>
+                                <div class="bg-gray-50 p-2 rounded border text-sm font-mono break-all">
+                                    ${numbersText}
+                                </div>
+                                <div class="flex flex-wrap gap-1 max-h-32 overflow-y-auto mt-2">
+                                    ${remainingNumbersData[validKey].map(num => 
+                                        `<span class="inline-block ${color.bg} ${color.text} px-2 py-1 rounded text-xs font-semibold">${num}</span>`
+                                    ).join('')}
+                                </div>
+                                <div class="text-xs ${color.textLight} mt-1">Tersisa: ${remainingNumbersData[validKey].length} angka</div>
+                            </div>
+                        `;
+                    }
+                }
+
+                // Final Summary
+                const finalRemaining = Object.values(remainingNumbersData).filter(arr => arr.length > 0);
+                if (finalRemaining.length > 0) {
+                    const lastStage = finalRemaining[finalRemaining.length - 1];
+                    const finalNumbersText = `*${lastStage.join('*')}*`;
+                    html += `
+                        <div class="border-t pt-3 mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="text-sm font-semibold text-gray-700">
+                                    🎯 Hasil Akhir: <span class="text-green-600">${lastStage.length} angka tersisa</span>
+                                </div>
+                                <button onclick="copyToClipboard('${finalNumbersText}', this)" class="px-2 py-1 bg-gray-600 hover:bg-gray-700 text-white text-xs rounded transition-colors">
+                                    📋 Salin Final
+                                </button>
+                            </div>
+                            <div class="bg-green-50 p-2 rounded border text-sm font-mono break-all font-semibold">
+                                ${finalNumbersText}
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1">
+                                Dari 100 angka awal → ${lastStage.length} angka final (${((lastStage.length/100)*100).toFixed(1)}%)
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            remainingContainer.innerHTML = html;
+        }
+
+        // Fungsi untuk menyalin ke clipboard
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(function() {
+                // Ubah teks tombol sementara
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Tersalin!';
+                button.classList.add('bg-green-600');
+                
+                // Kembalikan teks asli setelah 2 detik
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.classList.remove('bg-green-600');
+                }, 2000);
+            }).catch(function(err) {
+                // Fallback untuk browser yang tidak mendukung clipboard API
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                // Ubah teks tombol sementara
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Tersalin!';
+                button.classList.add('bg-green-600');
+                
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.classList.remove('bg-green-600');
+                }, 2000);
+            });
+        }
+
+        // Inisialisasi
+        initTable();
+        initTabs();
+        updateStatistics();
+
+        // Tambahkan event listener untuk reset
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                resetFilters();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9897c3933037d176',t:'MTc1OTYxMzI1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
