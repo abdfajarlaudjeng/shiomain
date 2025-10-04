@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Angka 2D - Ekor ON</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .ekor-active {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        .main-active-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .main-active-2 {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .main-active-3 {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+        }
+        .shio-active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        .number-2d {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        .animate-bounce-custom {
+            animation: bounce 1s infinite;
+        }
+        .pulse-ring {
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.33);
+            }
+            80%, 100% {
+                transform: scale(1.33);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <h1 class="text-2xl font-bold text-center">🎯 Generator Angka 2D - Ekor ON</h1>
+            <p class="text-center text-white opacity-90 mt-2">Masukkan ekor ON untuk generate angka 2D lengkap</p>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8 max-w-6xl">
+        <!-- Input Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Ekor ON Input -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">📝 Input Ekor ON</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Masukkan Ekor ON (1-8 digit)
+                        </label>
+                        <textarea 
+                            id="ekorInput" 
+                            placeholder="Contoh: 1,2,5,7 atau 1 2 5 7 atau 1257"
+                            rows="4"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg font-mono focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                        ></textarea>
+                        <div class="flex justify-between items-center mt-2">
+                            <p class="text-xs text-gray-500">
+                                Format: pisahkan dengan koma, spasi, atau tulis langsung
+                            </p>
+                            <span class="text-sm font-medium" id="ekorCount">0/8 digit</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <button id="clearBtn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            🗑️ Clear
+                        </button>
+                        <button id="sampleBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            📋 Contoh
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ekor Preview -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">👁️ Preview Ekor ON</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Ekor yang Aktif</label>
+                        <div class="grid grid-cols-5 gap-2" id="ekorPreview">
+                            <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">0</div>
+                            <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">1</div>
+                            <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">2</div>
+                            <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">3</div>
+                            <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">4</div>
+                            <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">5</div>
+                            <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">6</div>
+                            <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">7</div>
+                            <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">8</div>
+                            <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">9</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <h4 class="font-medium text-blue-800 mb-2">Statistik Ekor</h4>
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <span class="text-blue-600">Ekor Aktif:</span>
+                                <span class="font-bold ml-1" id="activeCount">0</span>
+                            </div>
+                            <div>
+                                <span class="text-blue-600">Total 2D:</span>
+                                <span class="font-bold ml-1" id="total2D">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generate Button -->
+        <div class="text-center mb-8">
+            <button id="generateBtn" class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transform transition-all duration-200 hover:scale-105 relative overflow-hidden">
+                <span class="relative z-10">🎲 Generate Angka 2D</span>
+                <div class="absolute inset-0 bg-white opacity-20 pulse-ring rounded-xl"></div>
+            </button>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Filter Angka Main 1 -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 1</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                        <div class="grid grid-cols-5 gap-2" id="mainNumberFilter1">
+                            <button class="main-filter-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                            <button class="main-filter-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                            <button class="main-filter-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                            <button class="main-filter-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                            <button class="main-filter-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                            <button class="main-filter-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                            <button class="main-filter-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                            <button class="main-filter-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                            <button class="main-filter-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                            <button class="main-filter-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 1</label>
+                        <select id="mainFilterMode1" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm">
+                            <option value="none">Tidak Ada Filter</option>
+                            <option value="contain">Harus Mengandung</option>
+                            <option value="exclude">Tidak Boleh Mengandung</option>
+                            <option value="kepala">Sebagai Kepala</option>
+                            <option value="ekor">Sebagai Ekor</option>
+                        </select>
+                    </div>
+                    
+                    <div class="bg-blue-50 rounded-lg p-2">
+                        <span class="text-xs text-blue-700">Aktif: </span>
+                        <span class="font-bold text-blue-800 text-xs" id="activeMainNumbers1">Belum ada</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Angka Main 2 -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 2</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                        <div class="grid grid-cols-5 gap-2" id="mainNumberFilter2">
+                            <button class="main-filter-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                            <button class="main-filter-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                            <button class="main-filter-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                            <button class="main-filter-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                            <button class="main-filter-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                            <button class="main-filter-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                            <button class="main-filter-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                            <button class="main-filter-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                            <button class="main-filter-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                            <button class="main-filter-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 2</label>
+                        <select id="mainFilterMode2" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 text-sm">
+                            <option value="none">Tidak Ada Filter</option>
+                            <option value="contain">Harus Mengandung</option>
+                            <option value="exclude">Tidak Boleh Mengandung</option>
+                            <option value="kepala">Sebagai Kepala</option>
+                            <option value="ekor">Sebagai Ekor</option>
+                        </select>
+                    </div>
+                    
+                    <div class="bg-green-50 rounded-lg p-2">
+                        <span class="text-xs text-green-700">Aktif: </span>
+                        <span class="font-bold text-green-800 text-xs" id="activeMainNumbers2">Belum ada</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Angka Main 3 -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 3</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                        <div class="grid grid-cols-5 gap-2" id="mainNumberFilter3">
+                            <button class="main-filter-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                            <button class="main-filter-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                            <button class="main-filter-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                            <button class="main-filter-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                            <button class="main-filter-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                            <button class="main-filter-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                            <button class="main-filter-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                            <button class="main-filter-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                            <button class="main-filter-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                            <button class="main-filter-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 3</label>
+                        <select id="mainFilterMode3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 text-sm">
+                            <option value="none">Tidak Ada Filter</option>
+                            <option value="contain">Harus Mengandung</option>
+                            <option value="exclude">Tidak Boleh Mengandung</option>
+                            <option value="kepala">Sebagai Kepala</option>
+                            <option value="ekor">Sebagai Ekor</option>
+                        </select>
+                    </div>
+                    
+                    <div class="bg-purple-50 rounded-lg p-2">
+                        <span class="text-xs text-purple-700">Aktif: </span>
+                        <span class="font-bold text-purple-800 text-xs" id="activeMainNumbers3">Belum ada</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Shio Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-8">
+            <!-- Filter Shio -->
+
+            <!-- Filter Shio -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🐉 Filter Shio</h3>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Shio (1-12)</label>
+                        <div class="grid grid-cols-3 gap-2" id="shioFilter">
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="1">
+                                <div class="font-bold">1</div>
+                                <div class="text-xs">Tikus</div>
+                            </button>
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="2">
+                                <div class="font-bold">2</div>
+                                <div class="text-xs">Kerbau</div>
+                            </button>
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="3">
+                                <div class="font-bold">3</div>
+                                <div class="text-xs">Macan</div>
+                            </button>
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="4">
+                                <div class="font-bold">4</div>
+                                <div class="text-xs">Kelinci</div>
+                            </button>
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="5">
+                                <div class="font-bold">5</div>
+                                <div class="text-xs">Naga</div>
+                            </button>
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="6">
+                                <div class="font-bold">6</div>
+                                <div class="text-xs">Ular</div>
+                            </button>
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="7">
+                                <div class="font-bold">7</div>
+                                <div class="text-xs">Kuda</div>
+                            </button>
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="8">
+                                <div class="font-bold">8</div>
+                                <div class="text-xs">Kambing</div>
+                            </button>
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="9">
+                                <div class="font-bold">9</div>
+                                <div class="text-xs">Monyet</div>
+                            </button>
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="10">
+                                <div class="font-bold">10</div>
+                                <div class="text-xs">Ayam</div>
+                            </button>
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="11">
+                                <div class="font-bold">11</div>
+                                <div class="text-xs">Anjing</div>
+                            </button>
+                            <button class="shio-filter bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="12">
+                                <div class="font-bold">12</div>
+                                <div class="text-xs">Babi</div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Shio</label>
+                        <select id="shioFilterMode" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                            <option value="none">Tidak Ada Filter</option>
+                            <option value="include">Hanya Shio Terpilih</option>
+                            <option value="exclude">Kecuali Shio Terpilih</option>
+                        </select>
+                    </div>
+                    
+                    <div class="bg-green-50 rounded-lg p-3">
+                        <span class="text-sm text-green-700">Shio Aktif: </span>
+                        <span class="font-bold text-green-800" id="activeShioNumbers">Belum ada</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Angka 2D Results -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">🎯 Angka 2D Hasil</h3>
+                    <div class="flex space-x-2">
+                        <button id="sortBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                            📊 Urutkan
+                        </button>
+                        <button id="shuffleBtn" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                            🔀 Acak
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="results2D" class="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto">
+                    <div class="text-gray-500 text-center py-8 col-span-5">
+                        Masukkan ekor ON dan klik Generate
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <span class="text-sm text-gray-600">Total Angka: <span id="resultCount" class="font-bold">0</span></span>
+                </div>
+            </div>
+
+            <!-- Analisis & Tools -->
+            <div class="space-y-6">
+                <!-- Quick Analysis -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">📈 Analisis Cepat</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Kembar (11,22,33...):</span>
+                            <span class="font-bold text-blue-600" id="kembarCount">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Besar (50-99):</span>
+                            <span class="font-bold text-green-600" id="besarCount">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Kecil (00-49):</span>
+                            <span class="font-bold text-orange-600" id="kecilCount">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Genap:</span>
+                            <span class="font-bold text-purple-600" id="genapCount">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Tools -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🛠️ Tools</h3>
+                    <div class="space-y-3">
+                        <button id="copyBtn" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            📋 Copy Semua Angka
+                        </button>
+                        <button id="exportBtn" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            💾 Export ke File
+                        </button>
+                        <button id="printBtn" class="w-full bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                            🖨️ Print Hasil
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Ekor Selector -->
+        <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">⚡ Quick Select Ekor</h3>
+            <div class="grid grid-cols-5 md:grid-cols-10 gap-2 mb-4">
+                <button class="ekor-quick bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="0">0</button>
+                <button class="ekor-quick bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="1">1</button>
+                <button class="ekor-quick bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="2">2</button>
+                <button class="ekor-quick bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="3">3</button>
+                <button class="ekor-quick bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="4">4</button>
+                <button class="ekor-quick bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="5">5</button>
+                <button class="ekor-quick bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="6">6</button>
+                <button class="ekor-quick bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="7">7</button>
+                <button class="ekor-quick bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="8">8</button>
+                <button class="ekor-quick bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="9">9</button>
+            </div>
+            <div class="flex space-x-2">
+                <button id="selectAllBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                    ✅ Pilih Semua
+                </button>
+                <button id="selectEvenBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                    🔢 Genap Saja
+                </button>
+                <button id="selectOddBtn" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                    🔢 Ganjil Saja
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEkor = new Set();
+        let generated2D = [];
+        let currentMainNumbers1 = new Set();
+        let currentMainNumbers2 = new Set();
+        let currentMainNumbers3 = new Set();
+        let currentShioNumbers = new Set();
+
+        // Parse ekor input
+        function parseEkorInput(input) {
+            const cleaned = input.replace(/[^0-9,\s]/g, '');
+            let ekorArray = [];
+            
+            // Try different parsing methods
+            if (cleaned.includes(',')) {
+                ekorArray = cleaned.split(',').map(s => s.trim()).filter(s => s !== '');
+            } else if (cleaned.includes(' ')) {
+                ekorArray = cleaned.split(/\s+/).filter(s => s !== '');
+            } else {
+                ekorArray = cleaned.split('').filter(s => s !== '');
+            }
+            
+            // Validate and convert to numbers
+            const validEkor = ekorArray
+                .map(e => parseInt(e))
+                .filter(e => !isNaN(e) && e >= 0 && e <= 9)
+                .slice(0, 8); // Maximum 8 digits
+            
+            return [...new Set(validEkor)]; // Remove duplicates
+        }
+
+        // Update ekor preview
+        function updateEkorPreview() {
+            const preview = document.getElementById('ekorPreview');
+            const children = preview.children;
+            
+            for (let i = 0; i < 10; i++) {
+                const child = children[i];
+                if (currentEkor.has(i)) {
+                    child.className = 'ekor-active rounded-lg p-3 text-center font-bold animate-bounce-custom';
+                } else {
+                    child.className = 'bg-gray-100 rounded-lg p-3 text-center text-gray-400';
+                }
+            }
+            
+            // Update counters
+            document.getElementById('activeCount').textContent = currentEkor.size;
+            document.getElementById('total2D').textContent = currentEkor.size * 10;
+            document.getElementById('ekorCount').textContent = `${currentEkor.size}/8 digit`;
+        }
+
+        // Update main numbers display
+        function updateMainNumbersDisplay() {
+            const activeMainText1 = currentMainNumbers1.size > 0 ? 
+                Array.from(currentMainNumbers1).sort().join(', ') : 'Belum ada';
+            document.getElementById('activeMainNumbers1').textContent = activeMainText1;
+            
+            const activeMainText2 = currentMainNumbers2.size > 0 ? 
+                Array.from(currentMainNumbers2).sort().join(', ') : 'Belum ada';
+            document.getElementById('activeMainNumbers2').textContent = activeMainText2;
+            
+            const activeMainText3 = currentMainNumbers3.size > 0 ? 
+                Array.from(currentMainNumbers3).sort().join(', ') : 'Belum ada';
+            document.getElementById('activeMainNumbers3').textContent = activeMainText3;
+        }
+
+        // Update shio display
+        function updateShioDisplay() {
+            const shioNames = {
+                1: 'Tikus', 2: 'Kerbau', 3: 'Macan', 4: 'Kelinci',
+                5: 'Naga', 6: 'Ular', 7: 'Kuda', 8: 'Kambing',
+                9: 'Monyet', 10: 'Ayam', 11: 'Anjing', 12: 'Babi'
+            };
+            
+            const activeShioText = currentShioNumbers.size > 0 ? 
+                Array.from(currentShioNumbers).sort((a, b) => a - b)
+                    .map(s => `${s}(${shioNames[s]})`).join(', ') : 'Belum ada';
+            document.getElementById('activeShioNumbers').textContent = activeShioText;
+        }
+
+        // Convert 2D number to Shio (1-12)
+        function numberToShio(number) {
+            const num = parseInt(number);
+            return ((num % 12) === 0) ? 12 : (num % 12);
+        }
+
+        // Apply main number filter
+        function applyMainFilter(numbers, mainNumbers, mode) {
+            if (mode === 'none' || mainNumbers.size === 0) return numbers;
+            
+            const mains = Array.from(mainNumbers);
+            
+            return numbers.filter(num => {
+                const digits = num.split('');
+                const kepala = digits[0];
+                const ekor = digits[1];
+                
+                switch (mode) {
+                    case 'contain':
+                        return mains.some(main => digits.includes(main));
+                    case 'exclude':
+                        return !mains.some(main => digits.includes(main));
+                    case 'kepala':
+                        return mains.includes(kepala);
+                    case 'ekor':
+                        return mains.includes(ekor);
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        // Apply shio filter
+        function applyShioFilter(numbers, shioNumbers, mode) {
+            if (mode === 'none' || shioNumbers.size === 0) return numbers;
+            
+            const shios = Array.from(shioNumbers);
+            
+            return numbers.filter(num => {
+                const shio = numberToShio(num);
+                
+                switch (mode) {
+                    case 'include':
+                        return shios.includes(shio);
+                    case 'exclude':
+                        return !shios.includes(shio);
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        // Generate 2D numbers with filters
+        function generate2DNumbers() {
+            let numbers = [];
+            
+            // Generate base numbers from ekor
+            for (let kepala = 0; kepala <= 9; kepala++) {
+                for (let ekor of currentEkor) {
+                    const number = String(kepala).padStart(1, '0') + String(ekor).padStart(1, '0');
+                    numbers.push(number);
+                }
+            }
+            
+            // Apply main number filter 1
+            const mainMode1 = document.getElementById('mainFilterMode1').value;
+            numbers = applyMainFilter(numbers, currentMainNumbers1, mainMode1);
+            
+            // Apply main number filter 2
+            const mainMode2 = document.getElementById('mainFilterMode2').value;
+            numbers = applyMainFilter(numbers, currentMainNumbers2, mainMode2);
+            
+            // Apply main number filter 3
+            const mainMode3 = document.getElementById('mainFilterMode3').value;
+            numbers = applyMainFilter(numbers, currentMainNumbers3, mainMode3);
+            
+            // Apply shio filter
+            const shioMode = document.getElementById('shioFilterMode').value;
+            numbers = applyShioFilter(numbers, currentShioNumbers, shioMode);
+            
+            return numbers.sort((a, b) => parseInt(a) - parseInt(b));
+        }
+
+        // Display 2D results
+        function display2DResults(numbers) {
+            const container = document.getElementById('results2D');
+            
+            if (numbers.length === 0) {
+                container.innerHTML = '<div class="text-gray-500 text-center py-8 col-span-5">Tidak ada angka</div>';
+                return;
+            }
+            
+            const shioNames = {
+                1: 'Tikus', 2: 'Kerbau', 3: 'Macan', 4: 'Kelinci',
+                5: 'Naga', 6: 'Ular', 7: 'Kuda', 8: 'Kambing',
+                9: 'Monyet', 10: 'Ayam', 11: 'Anjing', 12: 'Babi'
+            };
+            
+            container.innerHTML = numbers.map(num => {
+                const shio = numberToShio(num);
+                return `<div class="number-2d rounded-lg p-3 text-center font-bold text-white cursor-pointer transform hover:scale-105 transition-all" title="Angka: ${num} | Shio: ${shio} (${shioNames[shio]})">${num}<div class="text-xs opacity-75 mt-1">${shio}</div></div>`;
+            }).join('');
+            
+            document.getElementById('resultCount').textContent = numbers.length;
+            
+            // Add click handlers
+            container.querySelectorAll('.number-2d').forEach(el => {
+                el.addEventListener('click', function() {
+                    this.classList.toggle('ring-4');
+                    this.classList.toggle('ring-yellow-400');
+                });
+            });
+        }
+
+        // Analyze results
+        function analyzeResults(numbers) {
+            let kembar = 0, besar = 0, kecil = 0, genap = 0;
+            
+            numbers.forEach(num => {
+                const n = parseInt(num);
+                const digits = num.split('');
+                
+                if (digits[0] === digits[1]) kembar++;
+                if (n >= 50) besar++;
+                if (n < 50) kecil++;
+                if (n % 2 === 0) genap++;
+            });
+            
+            document.getElementById('kembarCount').textContent = kembar;
+            document.getElementById('besarCount').textContent = besar;
+            document.getElementById('kecilCount').textContent = kecil;
+            document.getElementById('genapCount').textContent = genap;
+        }
+
+        // Event listeners
+        document.getElementById('ekorInput').addEventListener('input', function(e) {
+            const ekorArray = parseEkorInput(e.target.value);
+            currentEkor = new Set(ekorArray);
+            updateEkorPreview();
+        });
+
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            if (currentEkor.size === 0) {
+                alert('Masukkan minimal 1 digit ekor!');
+                return;
+            }
+            
+            generated2D = generate2DNumbers();
+            display2DResults(generated2D);
+            analyzeResults(generated2D);
+            
+            // Animate button
+            this.classList.add('animate-bounce-custom');
+            setTimeout(() => {
+                this.classList.remove('animate-bounce-custom');
+            }, 1000);
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            document.getElementById('ekorInput').value = '';
+            currentEkor.clear();
+            updateEkorPreview();
+        });
+
+        document.getElementById('sampleBtn').addEventListener('click', function() {
+            document.getElementById('ekorInput').value = '1,3,5,7';
+            currentEkor = new Set([1, 3, 5, 7]);
+            updateEkorPreview();
+        });
+
+        document.getElementById('sortBtn').addEventListener('click', function() {
+            if (generated2D.length > 0) {
+                generated2D.sort((a, b) => parseInt(a) - parseInt(b));
+                display2DResults(generated2D);
+            }
+        });
+
+        document.getElementById('shuffleBtn').addEventListener('click', function() {
+            if (generated2D.length > 0) {
+                for (let i = generated2D.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [generated2D[i], generated2D[j]] = [generated2D[j], generated2D[i]];
+                }
+                display2DResults(generated2D);
+            }
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            if (generated2D.length === 0) {
+                alert('Belum ada angka untuk dicopy!');
+                return;
+            }
+            
+            const text = generated2D.join(', ');
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Angka berhasil dicopy ke clipboard!');
+            });
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            if (generated2D.length === 0) {
+                alert('Belum ada angka untuk diexport!');
+                return;
+            }
+            
+            const content = `Angka 2D - Ekor ON\nGenerated: ${new Date().toLocaleString('id-ID')}\nEkor Aktif: ${Array.from(currentEkor).join(', ')}\n\nAngka 2D:\n${generated2D.join(', ')}`;
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'angka-2d-ekor-on.txt';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('printBtn').addEventListener('click', function() {
+            if (generated2D.length === 0) {
+                alert('Belum ada angka untuk diprint!');
+                return;
+            }
+            
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head><title>Angka 2D - Ekor ON</title></head>
+                <body style="font-family: Arial, sans-serif; padding: 20px;">
+                    <h2>Angka 2D - Ekor ON</h2>
+                    <p>Generated: ${new Date().toLocaleString('id-ID')}</p>
+                    <p>Ekor Aktif: ${Array.from(currentEkor).join(', ')}</p>
+                    <p>Total Angka: ${generated2D.length}</p>
+                    <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin-top: 20px;">
+                        ${generated2D.map(num => `<div style="border: 1px solid #ccc; padding: 10px; text-align: center; font-weight: bold;">${num}</div>`).join('')}
+                    </div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        });
+
+        // Quick select buttons
+        document.querySelectorAll('.ekor-quick').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const ekor = parseInt(this.dataset.ekor);
+                
+                if (currentEkor.has(ekor)) {
+                    currentEkor.delete(ekor);
+                    this.classList.remove('ekor-active');
+                    this.classList.add('bg-gray-200');
+                } else {
+                    if (currentEkor.size >= 8) {
+                        alert('Maksimal 8 digit ekor!');
+                        return;
+                    }
+                    currentEkor.add(ekor);
+                    this.classList.add('ekor-active');
+                    this.classList.remove('bg-gray-200');
+                }
+                
+                // Update textarea
+                document.getElementById('ekorInput').value = Array.from(currentEkor).sort().join(',');
+                updateEkorPreview();
+            });
+        });
+
+        document.getElementById('selectAllBtn').addEventListener('click', function() {
+            currentEkor = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+            document.getElementById('ekorInput').value = '0,1,2,3,4,5,6,7,8,9';
+            updateEkorPreview();
+            
+            // Update quick buttons
+            document.querySelectorAll('.ekor-quick').forEach(btn => {
+                btn.classList.add('ekor-active');
+                btn.classList.remove('bg-gray-200');
+            });
+        });
+
+        document.getElementById('selectEvenBtn').addEventListener('click', function() {
+            currentEkor = new Set([0, 2, 4, 6, 8]);
+            document.getElementById('ekorInput').value = '0,2,4,6,8';
+            updateEkorPreview();
+            
+            // Update quick buttons
+            document.querySelectorAll('.ekor-quick').forEach(btn => {
+                const ekor = parseInt(btn.dataset.ekor);
+                if (ekor % 2 === 0) {
+                    btn.classList.add('ekor-active');
+                    btn.classList.remove('bg-gray-200');
+                } else {
+                    btn.classList.remove('ekor-active');
+                    btn.classList.add('bg-gray-200');
+                }
+            });
+        });
+
+        document.getElementById('selectOddBtn').addEventListener('click', function() {
+            currentEkor = new Set([1, 3, 5, 7, 9]);
+            document.getElementById('ekorInput').value = '1,3,5,7,9';
+            updateEkorPreview();
+            
+            // Update quick buttons
+            document.querySelectorAll('.ekor-quick').forEach(btn => {
+                const ekor = parseInt(btn.dataset.ekor);
+                if (ekor % 2 === 1) {
+                    btn.classList.add('ekor-active');
+                    btn.classList.remove('bg-gray-200');
+                } else {
+                    btn.classList.remove('ekor-active');
+                    btn.classList.add('bg-gray-200');
+                }
+            });
+        });
+
+        // Main number filter buttons for filter 1
+        document.querySelectorAll('.main-filter-1').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const main = this.dataset.main;
+                
+                if (currentMainNumbers1.has(main)) {
+                    currentMainNumbers1.delete(main);
+                    this.classList.remove('main-active-1');
+                    this.classList.add('bg-gray-200');
+                } else {
+                    currentMainNumbers1.add(main);
+                    this.classList.add('main-active-1');
+                    this.classList.remove('bg-gray-200');
+                }
+                
+                updateMainNumbersDisplay();
+            });
+        });
+
+        // Main number filter buttons for filter 2
+        document.querySelectorAll('.main-filter-2').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const main = this.dataset.main;
+                
+                if (currentMainNumbers2.has(main)) {
+                    currentMainNumbers2.delete(main);
+                    this.classList.remove('main-active-2');
+                    this.classList.add('bg-gray-200');
+                } else {
+                    currentMainNumbers2.add(main);
+                    this.classList.add('main-active-2');
+                    this.classList.remove('bg-gray-200');
+                }
+                
+                updateMainNumbersDisplay();
+            });
+        });
+
+        // Main number filter buttons for filter 3
+        document.querySelectorAll('.main-filter-3').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const main = this.dataset.main;
+                
+                if (currentMainNumbers3.has(main)) {
+                    currentMainNumbers3.delete(main);
+                    this.classList.remove('main-active-3');
+                    this.classList.add('bg-gray-200');
+                } else {
+                    currentMainNumbers3.add(main);
+                    this.classList.add('main-active-3');
+                    this.classList.remove('bg-gray-200');
+                }
+                
+                updateMainNumbersDisplay();
+            });
+        });
+
+        // Shio filter buttons
+        document.querySelectorAll('.shio-filter').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const shio = parseInt(this.dataset.shio);
+                
+                if (currentShioNumbers.has(shio)) {
+                    currentShioNumbers.delete(shio);
+                    this.classList.remove('shio-active');
+                    this.classList.add('bg-gray-200');
+                } else {
+                    currentShioNumbers.add(shio);
+                    this.classList.add('shio-active');
+                    this.classList.remove('bg-gray-200');
+                }
+                
+                updateShioDisplay();
+            });
+        });
+
+        // Initialize
+        updateEkorPreview();
+        updateMainNumbersDisplay();
+        updateShioDisplay();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9894a0f753e381c2',t:'MTc1OTU4MDM3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
