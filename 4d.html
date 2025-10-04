@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Angka 2D, 3D & 4D - Ekor ON</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .gradient-bg-3d {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .gradient-bg-4d {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .card-hover {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .ekor-active {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        .main-active-1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .main-active-2 {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        .main-active-3 {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+        }
+        .shio-active {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        .number-2d {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+        .number-3d {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        .number-4d {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+        .animate-bounce-custom {
+            animation: bounce 1s infinite;
+        }
+        .pulse-ring {
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+        }
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.33);
+            }
+            80%, 100% {
+                transform: scale(1.33);
+                opacity: 0;
+            }
+        }
+        .tab-active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <h1 class="text-2xl font-bold text-center">🎯 Generator Angka 2D, 3D & 4D - Ekor ON</h1>
+            <p class="text-center text-white opacity-90 mt-2">Generator lengkap dengan filter canggih untuk semua jenis angka</p>
+        </div>
+    </header>
+
+    <!-- Tab Navigation -->
+    <div class="container mx-auto px-6 py-4 max-w-6xl">
+        <div class="flex justify-center space-x-2 mb-8">
+            <button class="tab-btn tab-active px-6 py-3 rounded-lg font-semibold transition-all" data-tab="2d">
+                🎯 Generator 2D
+            </button>
+            <button class="tab-btn bg-white hover:bg-gray-100 px-6 py-3 rounded-lg font-semibold transition-all" data-tab="3d">
+                🎲 Generator 3D
+            </button>
+            <button class="tab-btn bg-white hover:bg-gray-100 px-6 py-3 rounded-lg font-semibold transition-all" data-tab="4d">
+                🎰 Generator 4D
+            </button>
+        </div>
+
+        <!-- 2D Generator Tab -->
+        <div id="tab-2d" class="tab-content">
+            <!-- Input Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Ekor ON Input -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">📝 Input Ekor ON (2D)</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Masukkan Ekor ON (1-8 digit)
+                            </label>
+                            <textarea 
+                                id="ekorInput2D" 
+                                placeholder="Contoh: 1,2,5,7 atau 1 2 5 7 atau 1257"
+                                rows="4"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg font-mono focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                            ></textarea>
+                            <div class="flex justify-between items-center mt-2">
+                                <p class="text-xs text-gray-500">
+                                    Format: pisahkan dengan koma, spasi, atau tulis langsung
+                                </p>
+                                <span class="text-sm font-medium" id="ekorCount2D">0/8 digit</span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <button id="clearBtn2D" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                🗑️ Clear
+                            </button>
+                            <button id="sampleBtn2D" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                📋 Contoh
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ekor Preview -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">👁️ Preview Ekor ON (2D)</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ekor yang Aktif</label>
+                            <div class="grid grid-cols-5 gap-2" id="ekorPreview2D">
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">0</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">1</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">2</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">3</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">4</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">5</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">6</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">7</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">8</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">9</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-medium text-blue-800 mb-2">Statistik Ekor</h4>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-blue-600">Ekor Aktif:</span>
+                                    <span class="font-bold ml-1" id="activeCount2D">0</span>
+                                </div>
+                                <div>
+                                    <span class="text-blue-600">Total 2D:</span>
+                                    <span class="font-bold ml-1" id="total2D">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div class="text-center mb-8">
+                <button id="generateBtn2D" class="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transform transition-all duration-200 hover:scale-105 relative overflow-hidden">
+                    <span class="relative z-10">🎲 Generate Angka 2D</span>
+                    <div class="absolute inset-0 bg-white opacity-20 pulse-ring rounded-xl"></div>
+                </button>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Filter Angka Main 1 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 1</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                            <div class="grid grid-cols-5 gap-2" id="mainNumberFilter2D1">
+                                <button class="main-filter-2d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                                <button class="main-filter-2d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                                <button class="main-filter-2d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                                <button class="main-filter-2d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                                <button class="main-filter-2d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                                <button class="main-filter-2d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                                <button class="main-filter-2d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                                <button class="main-filter-2d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                                <button class="main-filter-2d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                                <button class="main-filter-2d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 1</label>
+                            <select id="mainFilterMode2D1" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="contain">Harus Mengandung</option>
+                                <option value="exclude">Tidak Boleh Mengandung</option>
+                                <option value="kepala">Sebagai Kepala</option>
+                                <option value="ekor">Sebagai Ekor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-blue-50 rounded-lg p-2">
+                            <span class="text-xs text-blue-700">Aktif: </span>
+                            <span class="font-bold text-blue-800 text-xs" id="activeMainNumbers2D1">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Angka Main 2 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 2</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                            <div class="grid grid-cols-5 gap-2" id="mainNumberFilter2D2">
+                                <button class="main-filter-2d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                                <button class="main-filter-2d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                                <button class="main-filter-2d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                                <button class="main-filter-2d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                                <button class="main-filter-2d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                                <button class="main-filter-2d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                                <button class="main-filter-2d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                                <button class="main-filter-2d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                                <button class="main-filter-2d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                                <button class="main-filter-2d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 2</label>
+                            <select id="mainFilterMode2D2" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 text-sm">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="contain">Harus Mengandung</option>
+                                <option value="exclude">Tidak Boleh Mengandung</option>
+                                <option value="kepala">Sebagai Kepala</option>
+                                <option value="ekor">Sebagai Ekor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-green-50 rounded-lg p-2">
+                            <span class="text-xs text-green-700">Aktif: </span>
+                            <span class="font-bold text-green-800 text-xs" id="activeMainNumbers2D2">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Angka Main 3 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 3</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                            <div class="grid grid-cols-5 gap-2" id="mainNumberFilter2D3">
+                                <button class="main-filter-2d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                                <button class="main-filter-2d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                                <button class="main-filter-2d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                                <button class="main-filter-2d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                                <button class="main-filter-2d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                                <button class="main-filter-2d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                                <button class="main-filter-2d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                                <button class="main-filter-2d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                                <button class="main-filter-2d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                                <button class="main-filter-2d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 3</label>
+                            <select id="mainFilterMode2D3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 text-sm">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="contain">Harus Mengandung</option>
+                                <option value="exclude">Tidak Boleh Mengandung</option>
+                                <option value="kepala">Sebagai Kepala</option>
+                                <option value="ekor">Sebagai Ekor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-purple-50 rounded-lg p-2">
+                            <span class="text-xs text-purple-700">Aktif: </span>
+                            <span class="font-bold text-purple-800 text-xs" id="activeMainNumbers2D3">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Shio Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-8">
+                <!-- Filter Shio -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🐉 Filter Shio</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Shio (1-12)</label>
+                            <div class="grid grid-cols-3 gap-2" id="shioFilter2D">
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="1">
+                                    <div class="font-bold">1</div>
+                                    <div class="text-xs">Tikus</div>
+                                </button>
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="2">
+                                    <div class="font-bold">2</div>
+                                    <div class="text-xs">Kerbau</div>
+                                </button>
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="3">
+                                    <div class="font-bold">3</div>
+                                    <div class="text-xs">Macan</div>
+                                </button>
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="4">
+                                    <div class="font-bold">4</div>
+                                    <div class="text-xs">Kelinci</div>
+                                </button>
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="5">
+                                    <div class="font-bold">5</div>
+                                    <div class="text-xs">Naga</div>
+                                </button>
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="6">
+                                    <div class="font-bold">6</div>
+                                    <div class="text-xs">Ular</div>
+                                </button>
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="7">
+                                    <div class="font-bold">7</div>
+                                    <div class="text-xs">Kuda</div>
+                                </button>
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="8">
+                                    <div class="font-bold">8</div>
+                                    <div class="text-xs">Kambing</div>
+                                </button>
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="9">
+                                    <div class="font-bold">9</div>
+                                    <div class="text-xs">Monyet</div>
+                                </button>
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="10">
+                                    <div class="font-bold">10</div>
+                                    <div class="text-xs">Ayam</div>
+                                </button>
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="11">
+                                    <div class="font-bold">11</div>
+                                    <div class="text-xs">Anjing</div>
+                                </button>
+                                <button class="shio-filter-2d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="12">
+                                    <div class="font-bold">12</div>
+                                    <div class="text-xs">Babi</div>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Shio</label>
+                            <select id="shioFilterMode2D" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="include">Hanya Shio Terpilih</option>
+                                <option value="exclude">Kecuali Shio Terpilih</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-green-50 rounded-lg p-3">
+                            <span class="text-sm text-green-700">Shio Aktif: </span>
+                            <span class="font-bold text-green-800" id="activeShioNumbers2D">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Angka 2D Results -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">🎯 Angka 2D Hasil</h3>
+                        <div class="flex space-x-2">
+                            <button id="sortBtn2D" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                📊 Urutkan
+                            </button>
+                            <button id="shuffleBtn2D" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                🔀 Acak
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="results2D" class="grid grid-cols-5 gap-2 max-h-96 overflow-y-auto">
+                        <div class="text-gray-500 text-center py-8 col-span-5">
+                            Masukkan ekor ON dan klik Generate
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <span class="text-sm text-gray-600">Total Angka: <span id="resultCount2D" class="font-bold">0</span></span>
+                    </div>
+                </div>
+
+                <!-- Analisis & Tools -->
+                <div class="space-y-6">
+                    <!-- Quick Analysis -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">📈 Analisis Cepat</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Kembar (11,22,33...):</span>
+                                <span class="font-bold text-blue-600" id="kembarCount2D">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Besar (50-99):</span>
+                                <span class="font-bold text-green-600" id="besarCount2D">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Kecil (00-49):</span>
+                                <span class="font-bold text-orange-600" id="kecilCount2D">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Genap:</span>
+                                <span class="font-bold text-purple-600" id="genapCount2D">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Export Tools -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">🛠️ Tools</h3>
+                        <div class="space-y-3">
+                            <button id="copyBtn2D" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                📋 Copy Semua Angka
+                            </button>
+                            <button id="exportBtn2D" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                💾 Export ke File
+                            </button>
+                            <button id="printBtn2D" class="w-full bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                🖨️ Print Hasil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Ekor Selector -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">⚡ Quick Select Ekor</h3>
+                <div class="grid grid-cols-5 md:grid-cols-10 gap-2 mb-4">
+                    <button class="ekor-quick-2d bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="0">0</button>
+                    <button class="ekor-quick-2d bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="1">1</button>
+                    <button class="ekor-quick-2d bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="2">2</button>
+                    <button class="ekor-quick-2d bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="3">3</button>
+                    <button class="ekor-quick-2d bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="4">4</button>
+                    <button class="ekor-quick-2d bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="5">5</button>
+                    <button class="ekor-quick-2d bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="6">6</button>
+                    <button class="ekor-quick-2d bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="7">7</button>
+                    <button class="ekor-quick-2d bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="8">8</button>
+                    <button class="ekor-quick-2d bg-gray-200 hover:bg-blue-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="9">9</button>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="selectAllBtn2D" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        ✅ Pilih Semua
+                    </button>
+                    <button id="selectEvenBtn2D" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        🔢 Genap Saja
+                    </button>
+                    <button id="selectOddBtn2D" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        🔢 Ganjil Saja
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3D Generator Tab -->
+        <div id="tab-3d" class="tab-content hidden">
+            <!-- Input Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Ekor ON Input -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">📝 Input Ekor ON (3D)</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Masukkan Ekor ON (1-8 digit)
+                            </label>
+                            <textarea 
+                                id="ekorInput3D" 
+                                placeholder="Contoh: 1,2,5,7 atau 1 2 5 7 atau 1257"
+                                rows="4"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg font-mono focus:ring-2 focus:ring-pink-500 focus:border-transparent resize-none"
+                            ></textarea>
+                            <div class="flex justify-between items-center mt-2">
+                                <p class="text-xs text-gray-500">
+                                    Format: pisahkan dengan koma, spasi, atau tulis langsung
+                                </p>
+                                <span class="text-sm font-medium" id="ekorCount3D">0/8 digit</span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <button id="clearBtn3D" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                🗑️ Clear
+                            </button>
+                            <button id="sampleBtn3D" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                📋 Contoh
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ekor Preview -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">👁️ Preview Ekor ON (3D)</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ekor yang Aktif</label>
+                            <div class="grid grid-cols-5 gap-2" id="ekorPreview3D">
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">0</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">1</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">2</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">3</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">4</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">5</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">6</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">7</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">8</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">9</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-pink-50 rounded-lg p-4">
+                            <h4 class="font-medium text-pink-800 mb-2">Statistik Ekor</h4>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-pink-600">Ekor Aktif:</span>
+                                    <span class="font-bold ml-1" id="activeCount3D">0</span>
+                                </div>
+                                <div>
+                                    <span class="text-pink-600">Total 3D:</span>
+                                    <span class="font-bold ml-1" id="total3D">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div class="text-center mb-8">
+                <button id="generateBtn3D" class="bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-700 hover:to-red-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transform transition-all duration-200 hover:scale-105 relative overflow-hidden">
+                    <span class="relative z-10">🎲 Generate Angka 3D</span>
+                    <div class="absolute inset-0 bg-white opacity-20 pulse-ring rounded-xl"></div>
+                </button>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Filter Angka Main 1 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 1</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                            <div class="grid grid-cols-5 gap-2" id="mainNumberFilter3D1">
+                                <button class="main-filter-3d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                                <button class="main-filter-3d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                                <button class="main-filter-3d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                                <button class="main-filter-3d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                                <button class="main-filter-3d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                                <button class="main-filter-3d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                                <button class="main-filter-3d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                                <button class="main-filter-3d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                                <button class="main-filter-3d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                                <button class="main-filter-3d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 1</label>
+                            <select id="mainFilterMode3D1" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="contain">Harus Mengandung</option>
+                                <option value="exclude">Tidak Boleh Mengandung</option>
+                                <option value="kepala">Sebagai Kepala</option>
+                                <option value="ekor">Sebagai Ekor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-blue-50 rounded-lg p-2">
+                            <span class="text-xs text-blue-700">Aktif: </span>
+                            <span class="font-bold text-blue-800 text-xs" id="activeMainNumbers3D1">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Angka Main 2 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 2</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                            <div class="grid grid-cols-5 gap-2" id="mainNumberFilter3D2">
+                                <button class="main-filter-3d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                                <button class="main-filter-3d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                                <button class="main-filter-3d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                                <button class="main-filter-3d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                                <button class="main-filter-3d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                                <button class="main-filter-3d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                                <button class="main-filter-3d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                                <button class="main-filter-3d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                                <button class="main-filter-3d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                                <button class="main-filter-3d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 2</label>
+                            <select id="mainFilterMode3D2" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 text-sm">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="contain">Harus Mengandung</option>
+                                <option value="exclude">Tidak Boleh Mengandung</option>
+                                <option value="kepala">Sebagai Kepala</option>
+                                <option value="ekor">Sebagai Ekor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-green-50 rounded-lg p-2">
+                            <span class="text-xs text-green-700">Aktif: </span>
+                            <span class="font-bold text-green-800 text-xs" id="activeMainNumbers3D2">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Angka Main 3 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 3</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                            <div class="grid grid-cols-5 gap-2" id="mainNumberFilter3D3">
+                                <button class="main-filter-3d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                                <button class="main-filter-3d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                                <button class="main-filter-3d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                                <button class="main-filter-3d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                                <button class="main-filter-3d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                                <button class="main-filter-3d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                                <button class="main-filter-3d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                                <button class="main-filter-3d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                                <button class="main-filter-3d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                                <button class="main-filter-3d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 3</label>
+                            <select id="mainFilterMode3D3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 text-sm">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="contain">Harus Mengandung</option>
+                                <option value="exclude">Tidak Boleh Mengandung</option>
+                                <option value="kepala">Sebagai Kepala</option>
+                                <option value="ekor">Sebagai Ekor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-purple-50 rounded-lg p-2">
+                            <span class="text-xs text-purple-700">Aktif: </span>
+                            <span class="font-bold text-purple-800 text-xs" id="activeMainNumbers3D3">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Shio Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-8">
+                <!-- Filter Shio -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🐉 Filter Shio</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Shio (1-12)</label>
+                            <div class="grid grid-cols-3 gap-2" id="shioFilter3D">
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="1">
+                                    <div class="font-bold">1</div>
+                                    <div class="text-xs">Tikus</div>
+                                </button>
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="2">
+                                    <div class="font-bold">2</div>
+                                    <div class="text-xs">Kerbau</div>
+                                </button>
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="3">
+                                    <div class="font-bold">3</div>
+                                    <div class="text-xs">Macan</div>
+                                </button>
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="4">
+                                    <div class="font-bold">4</div>
+                                    <div class="text-xs">Kelinci</div>
+                                </button>
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="5">
+                                    <div class="font-bold">5</div>
+                                    <div class="text-xs">Naga</div>
+                                </button>
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="6">
+                                    <div class="font-bold">6</div>
+                                    <div class="text-xs">Ular</div>
+                                </button>
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="7">
+                                    <div class="font-bold">7</div>
+                                    <div class="text-xs">Kuda</div>
+                                </button>
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="8">
+                                    <div class="font-bold">8</div>
+                                    <div class="text-xs">Kambing</div>
+                                </button>
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="9">
+                                    <div class="font-bold">9</div>
+                                    <div class="text-xs">Monyet</div>
+                                </button>
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="10">
+                                    <div class="font-bold">10</div>
+                                    <div class="text-xs">Ayam</div>
+                                </button>
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="11">
+                                    <div class="font-bold">11</div>
+                                    <div class="text-xs">Anjing</div>
+                                </button>
+                                <button class="shio-filter-3d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="12">
+                                    <div class="font-bold">12</div>
+                                    <div class="text-xs">Babi</div>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Shio</label>
+                            <select id="shioFilterMode3D" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-pink-500">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="include">Hanya Shio Terpilih</option>
+                                <option value="exclude">Kecuali Shio Terpilih</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-green-50 rounded-lg p-3">
+                            <span class="text-sm text-green-700">Shio Aktif: </span>
+                            <span class="font-bold text-green-800" id="activeShioNumbers3D">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Angka 3D Results -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">🎲 Angka 3D Hasil</h3>
+                        <div class="flex space-x-2">
+                            <button id="sortBtn3D" class="bg-pink-500 hover:bg-pink-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                📊 Urutkan
+                            </button>
+                            <button id="shuffleBtn3D" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                🔀 Acak
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="results3D" class="grid grid-cols-4 gap-2 max-h-96 overflow-y-auto">
+                        <div class="text-gray-500 text-center py-8 col-span-4">
+                            Masukkan ekor ON dan klik Generate
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <span class="text-sm text-gray-600">Total Angka: <span id="resultCount3D" class="font-bold">0</span></span>
+                    </div>
+                </div>
+
+                <!-- Analisis & Tools -->
+                <div class="space-y-6">
+                    <!-- Quick Analysis -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">📈 Analisis Cepat</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Kembar (111,222...):</span>
+                                <span class="font-bold text-blue-600" id="kembarCount3D">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Besar (500-999):</span>
+                                <span class="font-bold text-green-600" id="besarCount3D">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Kecil (000-499):</span>
+                                <span class="font-bold text-orange-600" id="kecilCount3D">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Genap:</span>
+                                <span class="font-bold text-purple-600" id="genapCount3D">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Export Tools -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">🛠️ Tools</h3>
+                        <div class="space-y-3">
+                            <button id="copyBtn3D" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                📋 Copy Semua Angka
+                            </button>
+                            <button id="exportBtn3D" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                💾 Export ke File
+                            </button>
+                            <button id="printBtn3D" class="w-full bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                🖨️ Print Hasil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Ekor Selector -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">⚡ Quick Select Ekor</h3>
+                <div class="grid grid-cols-5 md:grid-cols-10 gap-2 mb-4">
+                    <button class="ekor-quick-3d bg-gray-200 hover:bg-pink-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="0">0</button>
+                    <button class="ekor-quick-3d bg-gray-200 hover:bg-pink-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="1">1</button>
+                    <button class="ekor-quick-3d bg-gray-200 hover:bg-pink-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="2">2</button>
+                    <button class="ekor-quick-3d bg-gray-200 hover:bg-pink-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="3">3</button>
+                    <button class="ekor-quick-3d bg-gray-200 hover:bg-pink-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="4">4</button>
+                    <button class="ekor-quick-3d bg-gray-200 hover:bg-pink-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="5">5</button>
+                    <button class="ekor-quick-3d bg-gray-200 hover:bg-pink-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="6">6</button>
+                    <button class="ekor-quick-3d bg-gray-200 hover:bg-pink-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="7">7</button>
+                    <button class="ekor-quick-3d bg-gray-200 hover:bg-pink-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="8">8</button>
+                    <button class="ekor-quick-3d bg-gray-200 hover:bg-pink-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="9">9</button>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="selectAllBtn3D" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        ✅ Pilih Semua
+                    </button>
+                    <button id="selectEvenBtn3D" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        🔢 Genap Saja
+                    </button>
+                    <button id="selectOddBtn3D" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        🔢 Ganjil Saja
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4D Generator Tab -->
+        <div id="tab-4d" class="tab-content hidden">
+            <!-- Input Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Ekor ON Input -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">📝 Input Ekor ON (4D)</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Masukkan Ekor ON (1-8 digit)
+                            </label>
+                            <textarea 
+                                id="ekorInput4D" 
+                                placeholder="Contoh: 1,2,5,7 atau 1 2 5 7 atau 1257"
+                                rows="4"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 text-lg font-mono focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
+                            ></textarea>
+                            <div class="flex justify-between items-center mt-2">
+                                <p class="text-xs text-gray-500">
+                                    Format: pisahkan dengan koma, spasi, atau tulis langsung
+                                </p>
+                                <span class="text-sm font-medium" id="ekorCount4D">0/8 digit</span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <button id="clearBtn4D" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                🗑️ Clear
+                            </button>
+                            <button id="sampleBtn4D" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                📋 Contoh
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ekor Preview -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">👁️ Preview Ekor ON (4D)</h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ekor yang Aktif</label>
+                            <div class="grid grid-cols-5 gap-2" id="ekorPreview4D">
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">0</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">1</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">2</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">3</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">4</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">5</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">6</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">7</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">8</div>
+                                <div class="bg-gray-100 rounded-lg p-3 text-center text-gray-400">9</div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-cyan-50 rounded-lg p-4">
+                            <h4 class="font-medium text-cyan-800 mb-2">Statistik Ekor</h4>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-cyan-600">Ekor Aktif:</span>
+                                    <span class="font-bold ml-1" id="activeCount4D">0</span>
+                                </div>
+                                <div>
+                                    <span class="text-cyan-600">Total 4D:</span>
+                                    <span class="font-bold ml-1" id="total4D">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generate Button -->
+            <div class="text-center mb-8">
+                <button id="generateBtn4D" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg transform transition-all duration-200 hover:scale-105 relative overflow-hidden">
+                    <span class="relative z-10">🎰 Generate Angka 4D</span>
+                    <div class="absolute inset-0 bg-white opacity-20 pulse-ring rounded-xl"></div>
+                </button>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <!-- Filter Angka Main 1 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 1</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                            <div class="grid grid-cols-5 gap-2" id="mainNumberFilter4D1">
+                                <button class="main-filter-4d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                                <button class="main-filter-4d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                                <button class="main-filter-4d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                                <button class="main-filter-4d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                                <button class="main-filter-4d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                                <button class="main-filter-4d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                                <button class="main-filter-4d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                                <button class="main-filter-4d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                                <button class="main-filter-4d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                                <button class="main-filter-4d-1 bg-gray-200 hover:bg-blue-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 1</label>
+                            <select id="mainFilterMode4D1" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="contain">Harus Mengandung</option>
+                                <option value="exclude">Tidak Boleh Mengandung</option>
+                                <option value="kepala">Sebagai Kepala</option>
+                                <option value="ekor">Sebagai Ekor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-blue-50 rounded-lg p-2">
+                            <span class="text-xs text-blue-700">Aktif: </span>
+                            <span class="font-bold text-blue-800 text-xs" id="activeMainNumbers4D1">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Angka Main 2 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 2</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                            <div class="grid grid-cols-5 gap-2" id="mainNumberFilter4D2">
+                                <button class="main-filter-4d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                                <button class="main-filter-4d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                                <button class="main-filter-4d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                                <button class="main-filter-4d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                                <button class="main-filter-4d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                                <button class="main-filter-4d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                                <button class="main-filter-4d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                                <button class="main-filter-4d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                                <button class="main-filter-4d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                                <button class="main-filter-4d-2 bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 2</label>
+                            <select id="mainFilterMode4D2" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 text-sm">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="contain">Harus Mengandung</option>
+                                <option value="exclude">Tidak Boleh Mengandung</option>
+                                <option value="kepala">Sebagai Kepala</option>
+                                <option value="ekor">Sebagai Ekor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-green-50 rounded-lg p-2">
+                            <span class="text-xs text-green-700">Aktif: </span>
+                            <span class="font-bold text-green-800 text-xs" id="activeMainNumbers4D2">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filter Angka Main 3 -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Angka Main 3</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Angka Main (0-9)</label>
+                            <div class="grid grid-cols-5 gap-2" id="mainNumberFilter4D3">
+                                <button class="main-filter-4d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="0">0</button>
+                                <button class="main-filter-4d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="1">1</button>
+                                <button class="main-filter-4d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="2">2</button>
+                                <button class="main-filter-4d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="3">3</button>
+                                <button class="main-filter-4d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="4">4</button>
+                                <button class="main-filter-4d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="5">5</button>
+                                <button class="main-filter-4d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="6">6</button>
+                                <button class="main-filter-4d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="7">7</button>
+                                <button class="main-filter-4d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="8">8</button>
+                                <button class="main-filter-4d-3 bg-gray-200 hover:bg-purple-200 rounded-lg p-2 text-center font-bold transition-colors text-sm" data-main="9">9</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Main 3</label>
+                            <select id="mainFilterMode4D3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 text-sm">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="contain">Harus Mengandung</option>
+                                <option value="exclude">Tidak Boleh Mengandung</option>
+                                <option value="kepala">Sebagai Kepala</option>
+                                <option value="ekor">Sebagai Ekor</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-purple-50 rounded-lg p-2">
+                            <span class="text-xs text-purple-700">Aktif: </span>
+                            <span class="font-bold text-purple-800 text-xs" id="activeMainNumbers4D3">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Shio Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-8">
+                <!-- Filter Shio -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🐉 Filter Shio</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Shio (1-12)</label>
+                            <div class="grid grid-cols-3 gap-2" id="shioFilter4D">
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="1">
+                                    <div class="font-bold">1</div>
+                                    <div class="text-xs">Tikus</div>
+                                </button>
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="2">
+                                    <div class="font-bold">2</div>
+                                    <div class="text-xs">Kerbau</div>
+                                </button>
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="3">
+                                    <div class="font-bold">3</div>
+                                    <div class="text-xs">Macan</div>
+                                </button>
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="4">
+                                    <div class="font-bold">4</div>
+                                    <div class="text-xs">Kelinci</div>
+                                </button>
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="5">
+                                    <div class="font-bold">5</div>
+                                    <div class="text-xs">Naga</div>
+                                </button>
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="6">
+                                    <div class="font-bold">6</div>
+                                    <div class="text-xs">Ular</div>
+                                </button>
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="7">
+                                    <div class="font-bold">7</div>
+                                    <div class="text-xs">Kuda</div>
+                                </button>
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="8">
+                                    <div class="font-bold">8</div>
+                                    <div class="text-xs">Kambing</div>
+                                </button>
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="9">
+                                    <div class="font-bold">9</div>
+                                    <div class="text-xs">Monyet</div>
+                                </button>
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="10">
+                                    <div class="font-bold">10</div>
+                                    <div class="text-xs">Ayam</div>
+                                </button>
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="11">
+                                    <div class="font-bold">11</div>
+                                    <div class="text-xs">Anjing</div>
+                                </button>
+                                <button class="shio-filter-4d bg-gray-200 hover:bg-green-200 rounded-lg p-2 text-center text-sm font-medium transition-colors" data-shio="12">
+                                    <div class="font-bold">12</div>
+                                    <div class="text-xs">Babi</div>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mode Filter Shio</label>
+                            <select id="shioFilterMode4D" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-cyan-500">
+                                <option value="none">Tidak Ada Filter</option>
+                                <option value="include">Hanya Shio Terpilih</option>
+                                <option value="exclude">Kecuali Shio Terpilih</option>
+                            </select>
+                        </div>
+                        
+                        <div class="bg-green-50 rounded-lg p-3">
+                            <span class="text-sm text-green-700">Shio Aktif: </span>
+                            <span class="font-bold text-green-800" id="activeShioNumbers4D">Belum ada</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Angka 4D Results -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">🎰 Angka 4D Hasil</h3>
+                        <div class="flex space-x-2">
+                            <button id="sortBtn4D" class="bg-cyan-500 hover:bg-cyan-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                📊 Urutkan
+                            </button>
+                            <button id="shuffleBtn4D" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                🔀 Acak
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="results4D" class="grid grid-cols-3 gap-2 max-h-96 overflow-y-auto">
+                        <div class="text-gray-500 text-center py-8 col-span-3">
+                            Masukkan ekor ON dan klik Generate
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <span class="text-sm text-gray-600">Total Angka: <span id="resultCount4D" class="font-bold">0</span></span>
+                    </div>
+                </div>
+
+                <!-- Analisis & Tools -->
+                <div class="space-y-6">
+                    <!-- Quick Analysis -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">📈 Analisis Cepat</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Kembar (1111,2222...):</span>
+                                <span class="font-bold text-blue-600" id="kembarCount4D">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Besar (5000-9999):</span>
+                                <span class="font-bold text-green-600" id="besarCount4D">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Kecil (0000-4999):</span>
+                                <span class="font-bold text-orange-600" id="kecilCount4D">0</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-600">Genap:</span>
+                                <span class="font-bold text-purple-600" id="genapCount4D">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Export Tools -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">🛠️ Tools</h3>
+                        <div class="space-y-3">
+                            <button id="copyBtn4D" class="w-full bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                📋 Copy Semua Angka
+                            </button>
+                            <button id="exportBtn4D" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                💾 Export ke File
+                            </button>
+                            <button id="printBtn4D" class="w-full bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                🖨️ Print Hasil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Ekor Selector -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">⚡ Quick Select Ekor</h3>
+                <div class="grid grid-cols-5 md:grid-cols-10 gap-2 mb-4">
+                    <button class="ekor-quick-4d bg-gray-200 hover:bg-cyan-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="0">0</button>
+                    <button class="ekor-quick-4d bg-gray-200 hover:bg-cyan-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="1">1</button>
+                    <button class="ekor-quick-4d bg-gray-200 hover:bg-cyan-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="2">2</button>
+                    <button class="ekor-quick-4d bg-gray-200 hover:bg-cyan-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="3">3</button>
+                    <button class="ekor-quick-4d bg-gray-200 hover:bg-cyan-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="4">4</button>
+                    <button class="ekor-quick-4d bg-gray-200 hover:bg-cyan-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="5">5</button>
+                    <button class="ekor-quick-4d bg-gray-200 hover:bg-cyan-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="6">6</button>
+                    <button class="ekor-quick-4d bg-gray-200 hover:bg-cyan-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="7">7</button>
+                    <button class="ekor-quick-4d bg-gray-200 hover:bg-cyan-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="8">8</button>
+                    <button class="ekor-quick-4d bg-gray-200 hover:bg-cyan-200 rounded-lg p-3 text-center font-bold transition-colors" data-ekor="9">9</button>
+                </div>
+                <div class="flex space-x-2">
+                    <button id="selectAllBtn4D" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        ✅ Pilih Semua
+                    </button>
+                    <button id="selectEvenBtn4D" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        🔢 Genap Saja
+                    </button>
+                    <button id="selectOddBtn4D" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        🔢 Ganjil Saja
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables for each generator
+        let currentEkor2D = new Set();
+        let currentEkor3D = new Set();
+        let currentEkor4D = new Set();
+        
+        let generated2D = [];
+        let generated3D = [];
+        let generated4D = [];
+        
+        let currentMainNumbers2D1 = new Set();
+        let currentMainNumbers2D2 = new Set();
+        let currentMainNumbers2D3 = new Set();
+        let currentShioNumbers2D = new Set();
+        
+        let currentMainNumbers3D1 = new Set();
+        let currentMainNumbers3D2 = new Set();
+        let currentMainNumbers3D3 = new Set();
+        let currentShioNumbers3D = new Set();
+        
+        let currentMainNumbers4D1 = new Set();
+        let currentMainNumbers4D2 = new Set();
+        let currentMainNumbers4D3 = new Set();
+        let currentShioNumbers4D = new Set();
+
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.dataset.tab;
+                
+                // Update tab buttons
+                document.querySelectorAll('.tab-btn').forEach(b => {
+                    b.classList.remove('tab-active');
+                    b.classList.add('bg-white', 'hover:bg-gray-100');
+                });
+                this.classList.add('tab-active');
+                this.classList.remove('bg-white', 'hover:bg-gray-100');
+                
+                // Update tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            });
+        });
+
+        // Parse ekor input
+        function parseEkorInput(input) {
+            const cleaned = input.replace(/[^0-9,\s]/g, '');
+            let ekorArray = [];
+            
+            // Try different parsing methods
+            if (cleaned.includes(',')) {
+                ekorArray = cleaned.split(',').map(s => s.trim()).filter(s => s !== '');
+            } else if (cleaned.includes(' ')) {
+                ekorArray = cleaned.split(/\s+/).filter(s => s !== '');
+            } else {
+                ekorArray = cleaned.split('').filter(s => s !== '');
+            }
+            
+            // Validate and convert to numbers
+            const validEkor = ekorArray
+                .map(e => parseInt(e))
+                .filter(e => !isNaN(e) && e >= 0 && e <= 9)
+                .slice(0, 8); // Maximum 8 digits
+            
+            return [...new Set(validEkor)]; // Remove duplicates
+        }
+
+        // Update ekor preview for specific generator
+        function updateEkorPreview(type) {
+            const preview = document.getElementById(`ekorPreview${type}`);
+            const children = preview.children;
+            const currentEkor = type === '2D' ? currentEkor2D : type === '3D' ? currentEkor3D : currentEkor4D;
+            
+            for (let i = 0; i < 10; i++) {
+                const child = children[i];
+                if (currentEkor.has(i)) {
+                    child.className = 'ekor-active rounded-lg p-3 text-center font-bold animate-bounce-custom';
+                } else {
+                    child.className = 'bg-gray-100 rounded-lg p-3 text-center text-gray-400';
+                }
+            }
+            
+            // Update counters
+            document.getElementById(`activeCount${type}`).textContent = currentEkor.size;
+            const multiplier = type === '2D' ? 10 : type === '3D' ? 100 : 1000;
+            document.getElementById(`total${type}`).textContent = currentEkor.size * multiplier;
+            document.getElementById(`ekorCount${type}`).textContent = `${currentEkor.size}/8 digit`;
+        }
+
+        // Update main numbers display for specific generator
+        function updateMainNumbersDisplay(type) {
+            const mainNumbers1 = type === '2D' ? currentMainNumbers2D1 : type === '3D' ? currentMainNumbers3D1 : currentMainNumbers4D1;
+            const mainNumbers2 = type === '2D' ? currentMainNumbers2D2 : type === '3D' ? currentMainNumbers3D2 : currentMainNumbers4D2;
+            const mainNumbers3 = type === '2D' ? currentMainNumbers2D3 : type === '3D' ? currentMainNumbers3D3 : currentMainNumbers4D3;
+            
+            const activeMainText1 = mainNumbers1.size > 0 ? 
+                Array.from(mainNumbers1).sort().join(', ') : 'Belum ada';
+            document.getElementById(`activeMainNumbers${type}1`).textContent = activeMainText1;
+            
+            const activeMainText2 = mainNumbers2.size > 0 ? 
+                Array.from(mainNumbers2).sort().join(', ') : 'Belum ada';
+            document.getElementById(`activeMainNumbers${type}2`).textContent = activeMainText2;
+            
+            const activeMainText3 = mainNumbers3.size > 0 ? 
+                Array.from(mainNumbers3).sort().join(', ') : 'Belum ada';
+            document.getElementById(`activeMainNumbers${type}3`).textContent = activeMainText3;
+        }
+
+        // Update shio display for specific generator
+        function updateShioDisplay(type) {
+            const shioNames = {
+                1: 'Tikus', 2: 'Kerbau', 3: 'Macan', 4: 'Kelinci',
+                5: 'Naga', 6: 'Ular', 7: 'Kuda', 8: 'Kambing',
+                9: 'Monyet', 10: 'Ayam', 11: 'Anjing', 12: 'Babi'
+            };
+            
+            const currentShio = type === '2D' ? currentShioNumbers2D : type === '3D' ? currentShioNumbers3D : currentShioNumbers4D;
+            
+            const activeShioText = currentShio.size > 0 ? 
+                Array.from(currentShio).sort((a, b) => a - b)
+                    .map(s => `${s}(${shioNames[s]})`).join(', ') : 'Belum ada';
+            document.getElementById(`activeShioNumbers${type}`).textContent = activeShioText;
+        }
+
+        // Convert number to Shio (1-12)
+        function numberToShio(number) {
+            const num = parseInt(number);
+            return ((num % 12) === 0) ? 12 : (num % 12);
+        }
+
+        // Apply main number filter
+        function applyMainFilter(numbers, mainNumbers, mode) {
+            if (mode === 'none' || mainNumbers.size === 0) return numbers;
+            
+            const mains = Array.from(mainNumbers);
+            
+            return numbers.filter(num => {
+                const digits = num.split('');
+                const kepala = digits[0];
+                const ekor = digits[digits.length - 1];
+                
+                switch (mode) {
+                    case 'contain':
+                        return mains.some(main => digits.includes(main));
+                    case 'exclude':
+                        return !mains.some(main => digits.includes(main));
+                    case 'kepala':
+                        return mains.includes(kepala);
+                    case 'ekor':
+                        return mains.includes(ekor);
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        // Apply shio filter
+        function applyShioFilter(numbers, shioNumbers, mode) {
+            if (mode === 'none' || shioNumbers.size === 0) return numbers;
+            
+            const shios = Array.from(shioNumbers);
+            
+            return numbers.filter(num => {
+                const shio = numberToShio(num);
+                
+                switch (mode) {
+                    case 'include':
+                        return shios.includes(shio);
+                    case 'exclude':
+                        return !shios.includes(shio);
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        // Generate numbers with filters for specific type
+        function generateNumbers(type) {
+            let numbers = [];
+            const currentEkor = type === '2D' ? currentEkor2D : type === '3D' ? currentEkor3D : currentEkor4D;
+            const mainNumbers1 = type === '2D' ? currentMainNumbers2D1 : type === '3D' ? currentMainNumbers3D1 : currentMainNumbers4D1;
+            const mainNumbers2 = type === '2D' ? currentMainNumbers2D2 : type === '3D' ? currentMainNumbers3D2 : currentMainNumbers4D2;
+            const mainNumbers3 = type === '2D' ? currentMainNumbers2D3 : type === '3D' ? currentMainNumbers3D3 : currentMainNumbers4D3;
+            const shioNumbers = type === '2D' ? currentShioNumbers2D : type === '3D' ? currentShioNumbers3D : currentShioNumbers4D;
+            
+            // Generate base numbers from ekor
+            if (type === '2D') {
+                for (let kepala = 0; kepala <= 9; kepala++) {
+                    for (let ekor of currentEkor) {
+                        const number = String(kepala).padStart(1, '0') + String(ekor).padStart(1, '0');
+                        numbers.push(number);
+                    }
+                }
+            } else if (type === '3D') {
+                for (let kepala1 = 0; kepala1 <= 9; kepala1++) {
+                    for (let kepala2 = 0; kepala2 <= 9; kepala2++) {
+                        for (let ekor of currentEkor) {
+                            const number = String(kepala1).padStart(1, '0') + String(kepala2).padStart(1, '0') + String(ekor).padStart(1, '0');
+                            numbers.push(number);
+                        }
+                    }
+                }
+            } else if (type === '4D') {
+                for (let kepala1 = 0; kepala1 <= 9; kepala1++) {
+                    for (let kepala2 = 0; kepala2 <= 9; kepala2++) {
+                        for (let kepala3 = 0; kepala3 <= 9; kepala3++) {
+                            for (let ekor of currentEkor) {
+                                const number = String(kepala1).padStart(1, '0') + String(kepala2).padStart(1, '0') + String(kepala3).padStart(1, '0') + String(ekor).padStart(1, '0');
+                                numbers.push(number);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Apply main number filters
+            const mainMode1 = document.getElementById(`mainFilterMode${type}1`).value;
+            numbers = applyMainFilter(numbers, mainNumbers1, mainMode1);
+            
+            const mainMode2 = document.getElementById(`mainFilterMode${type}2`).value;
+            numbers = applyMainFilter(numbers, mainNumbers2, mainMode2);
+            
+            const mainMode3 = document.getElementById(`mainFilterMode${type}3`).value;
+            numbers = applyMainFilter(numbers, mainNumbers3, mainMode3);
+            
+            // Apply shio filter
+            const shioMode = document.getElementById(`shioFilterMode${type}`).value;
+            numbers = applyShioFilter(numbers, shioNumbers, shioMode);
+            
+            return numbers.sort((a, b) => parseInt(a) - parseInt(b));
+        }
+
+        // Display results for specific type
+        function displayResults(type, numbers) {<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9894ae304198445e',t:'MTc1OTU4MDkyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
