@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Angka 4D Sering Keluar - Analisis Togel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .hot-number {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+        .warm-number {
+            background: linear-gradient(135deg, #ffa726 0%, #ff9800 100%);
+            color: white;
+        }
+        .cool-number {
+            background: linear-gradient(135deg, #42a5f5 0%, #2196f3 100%);
+            color: white;
+        }
+        .cold-number {
+            background: linear-gradient(135deg, #66bb6a 0%, #4caf50 100%);
+            color: white;
+        }
+        .frequency-bar {
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b 0%, #ffa726 50%, #42a5f5 100%);
+            border-radius: 2px;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <h1 class="text-3xl font-bold text-center">🔥 Database Angka 4D Sering Keluar</h1>
+            <p class="text-center text-white opacity-90 mt-2">Analisis pola historis angka 4D berdasarkan frekuensi keluaran</p>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8 max-w-7xl">
+        <!-- Filter & Controls -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Filter Kategori -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Filter Kategori</h3>
+                <div class="space-y-3">
+                    <button id="filterAll" class="w-full bg-purple-500 text-white px-4 py-2 rounded-lg transition-colors hover:bg-purple-600">
+                        🔥 Semua Angka
+                    </button>
+                    <button id="filterHot" class="w-full bg-red-500 text-white px-4 py-2 rounded-lg transition-colors hover:bg-red-600">
+                        🌡️ Super Hot (90%+)
+                    </button>
+                    <button id="filterWarm" class="w-full bg-orange-500 text-white px-4 py-2 rounded-lg transition-colors hover:bg-orange-600">
+                        🔥 Hot (70-89%)
+                    </button>
+                    <button id="filterCool" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg transition-colors hover:bg-blue-600">
+                        ❄️ Warm (50-69%)
+                    </button>
+                    <button id="filterCold" class="w-full bg-green-500 text-white px-4 py-2 rounded-lg transition-colors hover:bg-green-600">
+                        🧊 Cool (30-49%)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter Pola -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 Filter Pola</h3>
+                <div class="space-y-3">
+                    <button id="filterKembar" class="w-full bg-indigo-500 text-white px-4 py-2 rounded-lg transition-colors hover:bg-indigo-600">
+                        👥 Kembar (1111, 2222...)
+                    </button>
+                    <button id="filterUrut" class="w-full bg-teal-500 text-white px-4 py-2 rounded-lg transition-colors hover:bg-teal-600">
+                        📈 Urut (1234, 5678...)
+                    </button>
+                    <button id="filterGenap" class="w-full bg-pink-500 text-white px-4 py-2 rounded-lg transition-colors hover:bg-pink-600">
+                        🔢 Genap Semua
+                    </button>
+                    <button id="filterGanjil" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg transition-colors hover:bg-yellow-600">
+                        🔢 Ganjil Semua
+                    </button>
+                    <button id="filterBesar" class="w-full bg-gray-500 text-white px-4 py-2 rounded-lg transition-colors hover:bg-gray-600">
+                        📊 Besar (5000+)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistik -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">📈 Statistik Database</h3>
+                <div class="space-y-4">
+                    <div class="stat-card rounded-lg p-3">
+                        <div class="text-sm opacity-90">Total Angka Tracked</div>
+                        <div class="text-2xl font-bold" id="totalNumbers">150</div>
+                    </div>
+                    <div class="bg-red-100 rounded-lg p-3">
+                        <div class="text-sm text-red-700">Super Hot Numbers</div>
+                        <div class="text-xl font-bold text-red-800" id="hotCount">25</div>
+                    </div>
+                    <div class="bg-orange-100 rounded-lg p-3">
+                        <div class="text-sm text-orange-700">Hot Numbers</div>
+                        <div class="text-xl font-bold text-orange-800" id="warmCount">45</div>
+                    </div>
+                    <div class="bg-blue-100 rounded-lg p-3">
+                        <div class="text-sm text-blue-700">Warm Numbers</div>
+                        <div class="text-xl font-bold text-blue-800" id="coolCount">50</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search & Sort -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8 card-hover">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">🔍 Cari Angka</label>
+                    <input type="text" id="searchInput" placeholder="Cari angka 4D..." 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">📊 Urutkan</label>
+                    <select id="sortSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500">
+                        <option value="frequency">Frekuensi Tertinggi</option>
+                        <option value="number">Nomor Urut</option>
+                        <option value="recent">Terakhir Keluar</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">📋 Tampilan</label>
+                    <select id="viewSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-purple-500">
+                        <option value="grid">Grid View</option>
+                        <option value="list">List Detail</option>
+                        <option value="compact">Compact</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Display -->
+        <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">🎰 Database Angka 4D</h3>
+                <div class="flex space-x-2">
+                    <button id="exportBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        💾 Export
+                    </button>
+                    <button id="refreshBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                        🔄 Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="flex items-center space-x-2">
+                    <div class="w-4 h-4 bg-red-500 rounded"></div>
+                    <span class="text-sm">Super Hot (90%+)</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-4 h-4 bg-orange-500 rounded"></div>
+                    <span class="text-sm">Hot (70-89%)</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-4 h-4 bg-blue-500 rounded"></div>
+                    <span class="text-sm">Warm (50-69%)</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-4 h-4 bg-green-500 rounded"></div>
+                    <span class="text-sm">Cool (30-49%)</span>
+                </div>
+            </div>
+
+            <!-- Numbers Display -->
+            <div id="numbersDisplay" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <!-- Numbers will be populated by JavaScript -->
+            </div>
+
+            <div class="text-center mt-6">
+                <span class="text-sm text-gray-600">Menampilkan <span id="displayCount">0</span> dari <span id="totalCount">0</span> angka</span>
+            </div>
+        </div>
+
+        <!-- Analysis Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+            <!-- Top Performers -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🏆 Top 10 Performer</h3>
+                <div id="topPerformers" class="space-y-3">
+                    <!-- Top performers will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Recent Hot Numbers -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🔥 Hot Numbers Minggu Ini</h3>
+                <div id="recentHot" class="grid grid-cols-3 gap-3">
+                    <!-- Recent hot numbers will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl shadow-lg p-6 mt-8 text-white">
+            <h3 class="text-lg font-semibold mb-4">💡 Tips Menggunakan Database</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <h4 class="font-semibold mb-2">🎯 Strategi Hot Numbers:</h4>
+                    <ul class="space-y-1 opacity-90">
+                        <li>• Fokus pada angka kategori Super Hot dan Hot</li>
+                        <li>• Kombinasikan dengan analisis pola</li>
+                        <li>• Perhatikan tren mingguan</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-2">📊 Analisis Pola:</h4>
+                    <ul class="space-y-1 opacity-90">
+                        <li>• Angka kembar sering muncul di periode tertentu</li>
+                        <li>• Kombinasi genap-ganjil seimbang</li>
+                        <li>• Perhatikan siklus besar-kecil</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database angka 4D dengan frekuensi (simulasi data historis)
+        const numbersDatabase = [
+            // Super Hot Numbers (90%+)
+            {number: '1234', frequency: 95, category: 'hot', lastSeen: '2024-01-15', pattern: 'urut'},
+            {number: '5678', frequency: 92, category: 'hot', lastSeen: '2024-01-14', pattern: 'urut'},
+            {number: '0123', frequency: 91, category: 'hot', lastSeen: '2024-01-13', pattern: 'urut'},
+            {number: '7890', frequency: 90, category: 'hot', lastSeen: '2024-01-12', pattern: 'normal'},
+            {number: '1111', frequency: 94, category: 'hot', lastSeen: '2024-01-16', pattern: 'kembar'},
+            {number: '2222', frequency: 93, category: 'hot', lastSeen: '2024-01-15', pattern: 'kembar'},
+            {number: '3333', frequency: 91, category: 'hot', lastSeen: '2024-01-14', pattern: 'kembar'},
+            {number: '4444', frequency: 90, category: 'hot', lastSeen: '2024-01-13', pattern: 'kembar'},
+            {number: '8888', frequency: 96, category: 'hot', lastSeen: '2024-01-17', pattern: 'kembar'},
+            {number: '9999', frequency: 95, category: 'hot', lastSeen: '2024-01-16', pattern: 'kembar'},
+            {number: '0000', frequency: 92, category: 'hot', lastSeen: '2024-01-15', pattern: 'kembar'},
+            {number: '6789', frequency: 91, category: 'hot', lastSeen: '2024-01-14', pattern: 'urut'},
+            {number: '2468', frequency: 90, category: 'hot', lastSeen: '2024-01-13', pattern: 'genap'},
+            {number: '1357', frequency: 93, category: 'hot', lastSeen: '2024-01-16', pattern: 'ganjil'},
+            {number: '9876', frequency: 92, category: 'hot', lastSeen: '2024-01-15', pattern: 'urut'},
+            {number: '5555', frequency: 94, category: 'hot', lastSeen: '2024-01-17', pattern: 'kembar'},
+            {number: '7777', frequency: 91, category: 'hot', lastSeen: '2024-01-14', pattern: 'kembar'},
+            {number: '6666', frequency: 90, category: 'hot', lastSeen: '2024-01-13', pattern: 'kembar'},
+            {number: '1122', frequency: 89, category: 'hot', lastSeen: '2024-01-12', pattern: 'normal'},
+            {number: '3344', frequency: 88, category: 'hot', lastSeen: '2024-01-11', pattern: 'normal'},
+            {number: '5566', frequency: 87, category: 'hot', lastSeen: '2024-01-10', pattern: 'normal'},
+            {number: '7788', frequency: 86, category: 'hot', lastSeen: '2024-01-09', pattern: 'normal'},
+            {number: '9900', frequency: 85, category: 'hot', lastSeen: '2024-01-08', pattern: 'normal'},
+            {number: '1212', frequency: 84, category: 'hot', lastSeen: '2024-01-07', pattern: 'normal'},
+            {number: '3456', frequency: 83, category: 'hot', lastSeen: '2024-01-06', pattern: 'urut'},
+
+            // Hot Numbers (70-89%)
+            {number: '1001', frequency: 89, category: 'warm', lastSeen: '2024-01-12', pattern: 'normal'},
+            {number: '2002', frequency: 88, category: 'warm', lastSeen: '2024-01-11', pattern: 'normal'},
+            {number: '3003', frequency: 87, category: 'warm', lastSeen: '2024-01-10', pattern: 'normal'},
+            {number: '4004', frequency: 86, category: 'warm', lastSeen: '2024-01-09', pattern: 'normal'},
+            {number: '5005', frequency: 85, category: 'warm', lastSeen: '2024-01-08', pattern: 'normal'},
+            {number: '6006', frequency: 84, category: 'warm', lastSeen: '2024-01-07', pattern: 'normal'},
+            {number: '7007', frequency: 83, category: 'warm', lastSeen: '2024-01-06', pattern: 'normal'},
+            {number: '8008', frequency: 82, category: 'warm', lastSeen: '2024-01-05', pattern: 'normal'},
+            {number: '9009', frequency: 81, category: 'warm', lastSeen: '2024-01-04', pattern: 'normal'},
+            {number: '1010', frequency: 80, category: 'warm', lastSeen: '2024-01-03', pattern: 'normal'},
+            {number: '2020', frequency: 79, category: 'warm', lastSeen: '2024-01-02', pattern: 'normal'},
+            {number: '3030', frequency: 78, category: 'warm', lastSeen: '2024-01-01', pattern: 'normal'},
+            {number: '4040', frequency: 77, category: 'warm', lastSeen: '2023-12-31', pattern: 'normal'},
+            {number: '5050', frequency: 76, category: 'warm', lastSeen: '2023-12-30', pattern: 'normal'},
+            {number: '6060', frequency: 75, category: 'warm', lastSeen: '2023-12-29', pattern: 'normal'},
+            {number: '7070', frequency: 74, category: 'warm', lastSeen: '2023-12-28', pattern: 'normal'},
+            {number: '8080', frequency: 73, category: 'warm', lastSeen: '2023-12-27', pattern: 'normal'},
+            {number: '9090', frequency: 72, category: 'warm', lastSeen: '2023-12-26', pattern: 'normal'},
+            {number: '0101', frequency: 71, category: 'warm', lastSeen: '2023-12-25', pattern: 'normal'},
+            {number: '0202', frequency: 70, category: 'warm', lastSeen: '2023-12-24', pattern: 'normal'},
+
+            // Warm Numbers (50-69%)
+            {number: '1313', frequency: 69, category: 'cool', lastSeen: '2023-12-23', pattern: 'normal'},
+            {number: '1414', frequency: 68, category: 'cool', lastSeen: '2023-12-22', pattern: 'normal'},
+            {number: '1515', frequency: 67, category: 'cool', lastSeen: '2023-12-21', pattern: 'normal'},
+            {number: '1616', frequency: 66, category: 'cool', lastSeen: '2023-12-20', pattern: 'normal'},
+            {number: '1717', frequency: 65, category: 'cool', lastSeen: '2023-12-19', pattern: 'normal'},
+            {number: '1818', frequency: 64, category: 'cool', lastSeen: '2023-12-18', pattern: 'normal'},
+            {number: '1919', frequency: 63, category: 'cool', lastSeen: '2023-12-17', pattern: 'normal'},
+            {number: '2121', frequency: 62, category: 'cool', lastSeen: '2023-12-16', pattern: 'normal'},
+            {number: '2323', frequency: 61, category: 'cool', lastSeen: '2023-12-15', pattern: 'normal'},
+            {number: '2424', frequency: 60, category: 'cool', lastSeen: '2023-12-14', pattern: 'normal'},
+            {number: '2525', frequency: 59, category: 'cool', lastSeen: '2023-12-13', pattern: 'normal'},
+            {number: '2626', frequency: 58, category: 'cool', lastSeen: '2023-12-12', pattern: 'normal'},
+            {number: '2727', frequency: 57, category: 'cool', lastSeen: '2023-12-11', pattern: 'normal'},
+            {number: '2828', frequency: 56, category: 'cool', lastSeen: '2023-12-10', pattern: 'normal'},
+            {number: '2929', frequency: 55, category: 'cool', lastSeen: '2023-12-09', pattern: 'normal'},
+            {number: '3131', frequency: 54, category: 'cool', lastSeen: '2023-12-08', pattern: 'normal'},
+            {number: '3232', frequency: 53, category: 'cool', lastSeen: '2023-12-07', pattern: 'normal'},
+            {number: '3434', frequency: 52, category: 'cool', lastSeen: '2023-12-06', pattern: 'normal'},
+            {number: '3535', frequency: 51, category: 'cool', lastSeen: '2023-12-05', pattern: 'normal'},
+            {number: '3636', frequency: 50, category: 'cool', lastSeen: '2023-12-04', pattern: 'normal'},
+
+            // Cool Numbers (30-49%)
+            {number: '3737', frequency: 49, category: 'cold', lastSeen: '2023-12-03', pattern: 'normal'},
+            {number: '3838', frequency: 48, category: 'cold', lastSeen: '2023-12-02', pattern: 'normal'},
+            {number: '3939', frequency: 47, category: 'cold', lastSeen: '2023-12-01', pattern: 'normal'},
+            {number: '4141', frequency: 46, category: 'cold', lastSeen: '2023-11-30', pattern: 'normal'},
+            {number: '4242', frequency: 45, category: 'cold', lastSeen: '2023-11-29', pattern: 'normal'},
+            {number: '4343', frequency: 44, category: 'cold', lastSeen: '2023-11-28', pattern: 'normal'},
+            {number: '4545', frequency: 43, category: 'cold', lastSeen: '2023-11-27', pattern: 'normal'},
+            {number: '4646', frequency: 42, category: 'cold', lastSeen: '2023-11-26', pattern: 'normal'},
+            {number: '4747', frequency: 41, category: 'cold', lastSeen: '2023-11-25', pattern: 'normal'},
+            {number: '4848', frequency: 40, category: 'cold', lastSeen: '2023-11-24', pattern: 'normal'},
+            {number: '4949', frequency: 39, category: 'cold', lastSeen: '2023-11-23', pattern: 'normal'},
+            {number: '5151', frequency: 38, category: 'cold', lastSeen: '2023-11-22', pattern: 'normal'},
+            {number: '5252', frequency: 37, category: 'cold', lastSeen: '2023-11-21', pattern: 'normal'},
+            {number: '5353', frequency: 36, category: 'cold', lastSeen: '2023-11-20', pattern: 'normal'},
+            {number: '5454', frequency: 35, category: 'cold', lastSeen: '2023-11-19', pattern: 'normal'},
+            {number: '5656', frequency: 34, category: 'cold', lastSeen: '2023-11-18', pattern: 'normal'},
+            {number: '5757', frequency: 33, category: 'cold', lastSeen: '2023-11-17', pattern: 'normal'},
+            {number: '5858', frequency: 32, category: 'cold', lastSeen: '2023-11-16', pattern: 'normal'},
+            {number: '5959', frequency: 31, category: 'cold', lastSeen: '2023-11-15', pattern: 'normal'},
+            {number: '6161', frequency: 30, category: 'cold', lastSeen: '2023-11-14', pattern: 'normal'}
+        ];
+
+        let filteredNumbers = [...numbersDatabase];
+        let currentFilter = 'all';
+
+        // Initialize display
+        function initializeDisplay() {
+            updateStatistics();
+            displayNumbers();
+            displayTopPerformers();
+            displayRecentHot();
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const total = numbersDatabase.length;
+            const hot = numbersDatabase.filter(n => n.frequency >= 90).length;
+            const warm = numbersDatabase.filter(n => n.frequency >= 70 && n.frequency < 90).length;
+            const cool = numbersDatabase.filter(n => n.frequency >= 50 && n.frequency < 70).length;
+
+            document.getElementById('totalNumbers').textContent = total;
+            document.getElementById('hotCount').textContent = hot;
+            document.getElementById('warmCount').textContent = warm;
+            document.getElementById('coolCount').textContent = cool;
+        }
+
+        // Get category class
+        function getCategoryClass(frequency) {
+            if (frequency >= 90) return 'hot-number';
+            if (frequency >= 70) return 'warm-number';
+            if (frequency >= 50) return 'cool-number';
+            return 'cold-number';
+        }
+
+        // Display numbers
+        function displayNumbers() {
+            const container = document.getElementById('numbersDisplay');
+            const viewMode = document.getElementById('viewSelect').value;
+            
+            if (viewMode === 'list') {
+                container.className = 'space-y-3';
+                container.innerHTML = filteredNumbers.map(num => `
+                    <div class="${getCategoryClass(num.frequency)} rounded-lg p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="text-2xl font-bold">${num.number}</div>
+                            <div class="text-sm opacity-90">
+                                <div>Frekuensi: ${num.frequency}%</div>
+                                <div>Terakhir: ${num.lastSeen}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs opacity-75">${num.pattern.toUpperCase()}</div>
+                            <div class="w-20 bg-white bg-opacity-30 rounded-full h-2 mt-1">
+                                <div class="frequency-bar h-2 rounded-full" style="width: ${num.frequency}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } else if (viewMode === 'compact') {
+                container.className = 'grid grid-cols-4 md:grid-cols-8 lg:grid-cols-10 gap-2';
+                container.innerHTML = filteredNumbers.map(num => `
+                    <div class="${getCategoryClass(num.frequency)} rounded-lg p-2 text-center">
+                        <div class="font-bold text-sm">${num.number}</div>
+                        <div class="text-xs opacity-75">${num.frequency}%</div>
+                    </div>
+                `).join('');
+            } else {
+                container.className = 'grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4';
+                container.innerHTML = filteredNumbers.map(num => `
+                    <div class="${getCategoryClass(num.frequency)} rounded-lg p-4 text-center card-hover">
+                        <div class="text-xl font-bold mb-2">${num.number}</div>
+                        <div class="text-sm opacity-90 mb-2">
+                            <div>Frekuensi: ${num.frequency}%</div>
+                            <div class="text-xs">${num.lastSeen}</div>
+                        </div>
+                        <div class="w-full bg-white bg-opacity-30 rounded-full h-2">
+                            <div class="frequency-bar h-2 rounded-full" style="width: ${num.frequency}%"></div>
+                        </div>
+                        <div class="text-xs mt-1 opacity-75">${num.pattern.toUpperCase()}</div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('displayCount').textContent = filteredNumbers.length;
+            document.getElementById('totalCount').textContent = numbersDatabase.length;
+        }
+
+        // Display top performers
+        function displayTopPerformers() {
+            const top10 = [...numbersDatabase]
+                .sort((a, b) => b.frequency - a.frequency)
+                .slice(0, 10);
+
+            const container = document.getElementById('topPerformers');
+            container.innerHTML = top10.map((num, index) => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                            ${index + 1}
+                        </div>
+                        <div class="font-bold text-lg">${num.number}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold text-purple-600">${num.frequency}%</div>
+                        <div class="text-xs text-gray-500">${num.lastSeen}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Display recent hot numbers
+        function displayRecentHot() {
+            const recentHot = numbersDatabase
+                .filter(n => n.frequency >= 85)
+                .sort((a, b) => new Date(b.lastSeen) - new Date(a.lastSeen))
+                .slice(0, 9);
+
+            const container = document.getElementById('recentHot');
+            container.innerHTML = recentHot.map(num => `
+                <div class="${getCategoryClass(num.frequency)} rounded-lg p-3 text-center">
+                    <div class="font-bold">${num.number}</div>
+                    <div class="text-xs opacity-75">${num.frequency}%</div>
+                </div>
+            `).join('');
+        }
+
+        // Filter functions
+        function applyFilter(filterType) {
+            currentFilter = filterType;
+            
+            // Reset button styles
+            document.querySelectorAll('[id^="filter"]').forEach(btn => {
+                btn.classList.remove('ring-2', 'ring-white');
+            });
+            
+            // Highlight active filter
+            document.getElementById(`filter${filterType.charAt(0).toUpperCase() + filterType.slice(1)}`).classList.add('ring-2', 'ring-white');
+
+            switch (filterType) {
+                case 'all':
+                    filteredNumbers = [...numbersDatabase];
+                    break;
+                case 'hot':
+                    filteredNumbers = numbersDatabase.filter(n => n.frequency >= 90);
+                    break;
+                case 'warm':
+                    filteredNumbers = numbersDatabase.filter(n => n.frequency >= 70 && n.frequency < 90);
+                    break;
+                case 'cool':
+                    filteredNumbers = numbersDatabase.filter(n => n.frequency >= 50 && n.frequency < 70);
+                    break;
+                case 'cold':
+                    filteredNumbers = numbersDatabase.filter(n => n.frequency >= 30 && n.frequency < 50);
+                    break;
+                case 'kembar':
+                    filteredNumbers = numbersDatabase.filter(n => n.pattern === 'kembar');
+                    break;
+                case 'urut':
+                    filteredNumbers = numbersDatabase.filter(n => n.pattern === 'urut');
+                    break;
+                case 'genap':
+                    filteredNumbers = numbersDatabase.filter(n => n.pattern === 'genap');
+                    break;
+                case 'ganjil':
+                    filteredNumbers = numbersDatabase.filter(n => n.pattern === 'ganjil');
+                    break;
+                case 'besar':
+                    filteredNumbers = numbersDatabase.filter(n => parseInt(n.number) >= 5000);
+                    break;
+            }
+            
+            applySorting();
+            displayNumbers();
+        }
+
+        // Apply sorting
+        function applySorting() {
+            const sortType = document.getElementById('sortSelect').value;
+            
+            switch (sortType) {
+                case 'frequency':
+                    filteredNumbers.sort((a, b) => b.frequency - a.frequency);
+                    break;
+                case 'number':
+                    filteredNumbers.sort((a, b) => parseInt(a.number) - parseInt(b.number));
+                    break;
+                case 'recent':
+                    filteredNumbers.sort((a, b) => new Date(b.lastSeen) - new Date(a.lastSeen));
+                    break;
+            }
+        }
+
+        // Search function
+        function applySearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                applyFilter(currentFilter);
+                return;
+            }
+            
+            filteredNumbers = filteredNumbers.filter(n => 
+                n.number.includes(searchTerm) || 
+                n.pattern.includes(searchTerm)
+            );
+            
+            displayNumbers();
+        }
+
+        // Export function
+        function exportData() {
+            const data = filteredNumbers.map(n => 
+                `${n.number}\t${n.frequency}%\t${n.lastSeen}\t${n.pattern}`
+            ).join('\n');
+            
+            const header = 'Angka\tFrekuensi\tTerakhir Keluar\tPola\n';
+            const fullData = header + data;
+            
+            const blob = new Blob([fullData], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `database-4d-${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Event listeners
+        document.getElementById('filterAll').addEventListener('click', () => applyFilter('all'));
+        document.getElementById('filterHot').addEventListener('click', () => applyFilter('hot'));
+        document.getElementById('filterWarm').addEventListener('click', () => applyFilter('warm'));
+        document.getElementById('filterCool').addEventListener('click', () => applyFilter('cool'));
+        document.getElementById('filterCold').addEventListener('click', () => applyFilter('cold'));
+        document.getElementById('filterKembar').addEventListener('click', () => applyFilter('kembar'));
+        document.getElementById('filterUrut').addEventListener('click', () => applyFilter('urut'));
+        document.getElementById('filterGenap').addEventListener('click', () => applyFilter('genap'));
+        document.getElementById('filterGanjil').addEventListener('click', () => applyFilter('ganjil'));
+        document.getElementById('filterBesar').addEventListener('click', () => applyFilter('besar'));
+
+        document.getElementById('sortSelect').addEventListener('change', () => {
+            applySorting();
+            displayNumbers();
+        });
+
+        document.getElementById('viewSelect').addEventListener('change', displayNumbers);
+
+        document.getElementById('searchInput').addEventListener('input', applySearch);
+
+        document.getElementById('exportBtn').addEventListener('click', exportData);
+
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+            // Simulate data refresh
+            document.getElementById('refreshBtn').innerHTML = '⏳ Refreshing...';
+            setTimeout(() => {
+                document.getElementById('refreshBtn').innerHTML = '🔄 Refresh';
+                initializeDisplay();
+            }, 1000);
+        });
+
+        // Initialize
+        initializeDisplay();
+        applyFilter('all');
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9894c7ffc5cace3d',t:'MTc1OTU4MTk3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
