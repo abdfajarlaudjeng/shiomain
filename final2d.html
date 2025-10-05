@@ -187,11 +187,21 @@
                 </div>
 
                 <!-- Panel Angka Tersisa -->
-                <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
                     <h3 class="text-xl font-semibold text-gray-800 mb-4">✅ Angka Tersisa</h3>
                     <div id="remainingNumbers" class="space-y-3">
                         <div class="text-sm text-gray-500 text-center py-4">
                             Belum ada filter yang diterapkan
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabel Rekap BBFS -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">🎲 Rekap BBFS (Bolak-Balik Full Set)</h3>
+                    <div id="bbfsTable" class="space-y-4">
+                        <div class="text-sm text-gray-500 text-center py-4">
+                            Masukkan Angka Main dan Validasi untuk melihat rekap BBFS
                         </div>
                     </div>
                 </div>
@@ -868,6 +878,7 @@
 
             updateCrossedNumbersDisplay();
             updateRemainingNumbersDisplay();
+            updateBBFSTable();
             return filteredCount;
         }
 
@@ -1106,6 +1117,461 @@
             crossedContainer.innerHTML = html;
         }
 
+        // Fungsi untuk membuat rekap BBFS
+        function updateBBFSTable() {
+            const bbfsContainer = document.getElementById('bbfsTable');
+            let html = '';
+
+            // Check if any filters are applied
+            const hasFilters = currentFilter.angkaMain || currentFilter.validAngka.length > 0;
+            
+            if (!hasFilters) {
+                html = '<div class="text-sm text-gray-500 text-center py-4">Masukkan Angka Main dan Validasi untuk melihat rekap BBFS</div>';
+            } else {
+                html += '<div class="overflow-x-auto">';
+                html += '<table class="w-full border-collapse border border-gray-300 text-sm">';
+                
+                // Header
+                html += `
+                    <thead>
+                        <tr class="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                            <th class="border border-gray-300 px-3 py-2 text-left">Filter Stage</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">BBFS Input</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">Angka Cross</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">Jumlah Angka</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">BBFS 5 Digit Kuat</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">Kombinasi 2D</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">Kombinasi 4D</th>
+                            <th class="border border-gray-300 px-3 py-2 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+
+                // Angka Main
+                if (currentFilter.angkaMain) {
+                    const uniqueDigits = [...new Set(currentFilter.angkaMain.split(''))].sort();
+                    const combinations2D = generateCombinations2D(uniqueDigits);
+                    const combinations4D = generateCombinations4D(uniqueDigits);
+                    const bbfsText = `*${remainingNumbersData.afterAngkaMain.join('*')}*`;
+                    const crossedNumbers = crossedNumbersData.angkaMain;
+                    const bbfs5Digit = generateBBFS5Digit(remainingNumbersData.afterAngkaMain);
+                    
+                    html += `
+                        <tr class="hover:bg-green-50">
+                            <td class="border border-gray-300 px-3 py-2 font-semibold text-green-700">
+                                🎯 Angka Main
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center font-mono bg-green-50">
+                                <span class="bg-green-200 px-2 py-1 rounded">${currentFilter.angkaMain}</span>
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center">
+                                <div class="max-h-16 overflow-y-auto">
+                                    <div class="flex flex-wrap gap-1 justify-center">
+                                        ${crossedNumbers.slice(0, 8).map(num => 
+                                            `<span class="bg-red-100 text-red-800 px-1 py-0.5 rounded text-xs">${num}</span>`
+                                        ).join('')}
+                                        ${crossedNumbers.length > 8 ? `<span class="text-xs text-gray-500">+${crossedNumbers.length - 8}</span>` : ''}
+                                    </div>
+                                </div>
+                                <div class="text-xs text-red-600 mt-1">${crossedNumbers.length} cross</div>
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center font-semibold">
+                                ${remainingNumbersData.afterAngkaMain.length}
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center">
+                                <div class="space-y-1">
+                                    ${bbfs5Digit.map((bbfs, index) => 
+                                        `<div class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-mono">
+                                            <strong>Set ${index + 1}:</strong> ${bbfs.join('')}
+                                        </div>`
+                                    ).join('')}
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">${bbfs5Digit.length} set</div>
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center">
+                                <div class="max-h-20 overflow-y-auto">
+                                    <div class="flex flex-wrap gap-1 justify-center">
+                                        ${combinations2D.slice(0, 10).map(combo => 
+                                            `<span class="bg-purple-100 text-purple-800 px-1 py-0.5 rounded text-xs">${combo}</span>`
+                                        ).join('')}
+                                        ${combinations2D.length > 10 ? `<span class="text-xs text-gray-500">+${combinations2D.length - 10} lagi</span>` : ''}
+                                    </div>
+                                </div>
+                                <div class="text-xs text-gray-500 mt-1">${combinations2D.length} kombinasi</div>
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center">
+                                <div class="max-h-20 overflow-y-auto">
+                                    <div class="text-xs font-mono bg-blue-50 p-2 rounded mb-2">
+                                        ${combinations4D.formatted}
+                                    </div>
+                                    <div class="text-xs text-gray-500">
+                                        ${combinations4D.count} kombinasi 4D
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 text-center">
+                                <button onclick="copyToClipboard('${bbfsText}', this)" class="px-2 py-1 bg-green-500 hover:bg-green-600 text-white text-xs rounded transition-colors mb-1">
+                                    📋 Salin
+                                </button>
+                                <br>
+                                <button onclick="copyBBFS5Digit(${JSON.stringify(bbfs5Digit)}, this)" class="px-2 py-1 bg-yellow-500 hover:bg-yellow-600 text-white text-xs rounded transition-colors mb-1">
+                                    🎯 5D
+                                </button>
+                                <br>
+                                <button onclick="copyToClipboard('${combinations4D.raw}', this)" class="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded transition-colors">
+                                    🎲 4D
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+
+                // Valid 1-6
+                for (let i = 1; i <= 6; i++) {
+                    const validKey = `afterValid${i}`;
+                    const validValue = document.getElementById(`valid${i}`).value;
+                    
+                    if (remainingNumbersData[validKey] && remainingNumbersData[validKey].length > 0 && validValue) {
+                        const uniqueDigits = [...new Set(validValue.split(''))].sort();
+                        const combinations2D = generateCombinations2D(uniqueDigits);
+                        const combinations4D = generateCombinations4D(uniqueDigits);
+                        const bbfsText = `*${remainingNumbersData[validKey].join('*')}*`;
+                        
+                        const colors = {
+                            1: { bg: 'bg-orange-50', text: 'text-orange-700', badge: 'bg-orange-200', btn: 'bg-orange-500 hover:bg-orange-600' },
+                            2: { bg: 'bg-yellow-50', text: 'text-yellow-700', badge: 'bg-yellow-200', btn: 'bg-yellow-500 hover:bg-yellow-600' },
+                            3: { bg: 'bg-emerald-50', text: 'text-emerald-700', badge: 'bg-emerald-200', btn: 'bg-emerald-500 hover:bg-emerald-600' },
+                            4: { bg: 'bg-blue-50', text: 'text-blue-700', badge: 'bg-blue-200', btn: 'bg-blue-500 hover:bg-blue-600' },
+                            5: { bg: 'bg-purple-50', text: 'text-purple-700', badge: 'bg-purple-200', btn: 'bg-purple-500 hover:bg-purple-600' },
+                            6: { bg: 'bg-pink-50', text: 'text-pink-700', badge: 'bg-pink-200', btn: 'bg-pink-500 hover:bg-pink-600' }
+                        };
+                        
+                        const color = colors[i];
+                        
+                        const crossedNumbers = crossedNumbersData[`valid${i}`];
+                        const bbfs5Digit = generateBBFS5Digit(remainingNumbersData[validKey]);
+                        
+                        html += `
+                            <tr class="hover:${color.bg}">
+                                <td class="border border-gray-300 px-3 py-2 font-semibold ${color.text}">
+                                    ✅ Valid ${i}
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-mono ${color.bg}">
+                                    <span class="${color.badge} px-2 py-1 rounded">${validValue}</span>
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <div class="max-h-16 overflow-y-auto">
+                                        <div class="flex flex-wrap gap-1 justify-center">
+                                            ${crossedNumbers.slice(0, 8).map(num => 
+                                                `<span class="bg-red-100 text-red-800 px-1 py-0.5 rounded text-xs">${num}</span>`
+                                            ).join('')}
+                                            ${crossedNumbers.length > 8 ? `<span class="text-xs text-gray-500">+${crossedNumbers.length - 8}</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="text-xs text-red-600 mt-1">${crossedNumbers.length} cross</div>
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-semibold">
+                                    ${remainingNumbersData[validKey].length}
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <div class="space-y-1">
+                                        ${bbfs5Digit.map((bbfs, index) => 
+                                            `<div class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-mono">
+                                                <strong>Set ${index + 1}:</strong> ${bbfs.join('')}
+                                            </div>`
+                                        ).join('')}
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">${bbfs5Digit.length} set</div>
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <div class="max-h-20 overflow-y-auto">
+                                        <div class="flex flex-wrap gap-1 justify-center">
+                                            ${combinations2D.slice(0, 10).map(combo => 
+                                                `<span class="bg-purple-100 text-purple-800 px-1 py-0.5 rounded text-xs">${combo}</span>`
+                                            ).join('')}
+                                            ${combinations2D.length > 10 ? `<span class="text-xs text-gray-500">+${combinations2D.length - 10} lagi</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">${combinations2D.length} kombinasi</div>
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <div class="max-h-20 overflow-y-auto">
+                                        <div class="text-xs font-mono bg-blue-50 p-2 rounded mb-2">
+                                            ${combinations4D.formatted}
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            ${combinations4D.count} kombinasi 4D
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">
+                                    <button onclick="copyToClipboard('${bbfsText}', this)" class="px-2 py-1 ${color.btn} text-white text-xs rounded transition-colors mb-1">
+                                        📋 Salin
+                                    </button>
+                                    <br>
+                                    <button onclick="copyBBFS5Digit(${JSON.stringify(bbfs5Digit)}, this)" class="px-2 py-1 bg-yellow-500 hover:bg-yellow-600 text-white text-xs rounded transition-colors mb-1">
+                                        🎯 5D
+                                    </button>
+                                    <br>
+                                    <button onclick="copyToClipboard('${combinations4D.raw}', this)" class="px-2 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded transition-colors">
+                                        🎲 4D
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }
+                }
+
+                html += '</tbody></table></div>';
+
+                // Summary BBFS
+                const finalRemaining = Object.values(remainingNumbersData).filter(arr => arr.length > 0);
+                if (finalRemaining.length > 0) {
+                    const lastStage = finalRemaining[finalRemaining.length - 1];
+                    const allDigitsUsed = new Set();
+                    
+                    // Kumpulkan semua digit yang digunakan
+                    if (currentFilter.angkaMain) {
+                        currentFilter.angkaMain.split('').forEach(d => allDigitsUsed.add(d));
+                    }
+                    currentFilter.validAngka.forEach(valid => {
+                        if (valid) valid.split('').forEach(d => allDigitsUsed.add(d));
+                    });
+                    
+                    const uniqueDigitsAll = [...allDigitsUsed].sort();
+                    const totalCombinations2D = generateCombinations2D(uniqueDigitsAll);
+                    const totalCombinations4D = generateCombinations4D(uniqueDigitsAll);
+                    
+                    html += `
+                        <div class="mt-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border">
+                            <h4 class="font-bold text-gray-800 mb-3">📊 Ringkasan BBFS Final</h4>
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 text-center">
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <div class="text-2xl font-bold text-blue-600">${lastStage.length}</div>
+                                    <div class="text-xs text-gray-600">Angka Tersisa</div>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <div class="text-2xl font-bold text-green-600">${uniqueDigitsAll.length}</div>
+                                    <div class="text-xs text-gray-600">Digit Unik</div>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <div class="text-2xl font-bold text-purple-600">${totalCombinations2D.length}</div>
+                                    <div class="text-xs text-gray-600">Kombinasi 2D</div>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <div class="text-2xl font-bold text-indigo-600">${totalCombinations4D.count}</div>
+                                    <div class="text-xs text-gray-600">Kombinasi 4D</div>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg shadow-sm">
+                                    <div class="text-2xl font-bold text-orange-600">${((lastStage.length/100)*100).toFixed(1)}%</div>
+                                    <div class="text-xs text-gray-600">Efisiensi</div>
+                                </div>
+                            </div>
+                            <div class="mt-3 text-center">
+                                <div class="text-sm text-gray-700 mb-2">
+                                    <strong>Digit BBFS:</strong> 
+                                    ${uniqueDigitsAll.map(digit => 
+                                        `<span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-semibold mx-0.5">${digit}</span>`
+                                    ).join('')}
+                                </div>
+                                <div class="text-xs text-gray-500 mb-3">
+                                    Sistem bertahap mengoptimalkan dari ${uniqueDigitsAll.length} digit menjadi ${lastStage.length} angka final
+                                </div>
+                                <div class="flex justify-center space-x-2">
+                                    <button onclick="copyToClipboard('${totalCombinations4D.raw}', this)" class="px-3 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm rounded transition-colors">
+                                        🎲 Salin Semua 4D
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            bbfsContainer.innerHTML = html;
+        }
+
+        // Fungsi untuk generate kombinasi 2D dari digit
+        function generateCombinations2D(digits) {
+            const combinations = [];
+            
+            // Generate all possible 2-digit combinations
+            for (let i = 0; i < digits.length; i++) {
+                for (let j = 0; j < digits.length; j++) {
+                    const combo = digits[i] + digits[j];
+                    if (!combinations.includes(combo)) {
+                        combinations.push(combo);
+                    }
+                }
+            }
+            
+            return combinations.sort();
+        }
+
+        // Fungsi untuk generate kombinasi 4D dari digit (2D Depan + 2D Tengah + 2D Belakang)
+        function generateCombinations4D(digits) {
+            if (digits.length < 2) {
+                return { formatted: 'Minimal 2 digit diperlukan', raw: '', count: 0 };
+            }
+            
+            const combinations2D = generateCombinations2D(digits);
+            const combinations4D = [];
+            
+            // Generate 4D combinations by combining 2D combinations
+            // Format: 2D_Depan + 2D_Tengah + 2D_Belakang = 4D
+            for (let i = 0; i < Math.min(combinations2D.length, 20); i++) { // Limit to first 20 for performance
+                for (let j = 0; j < Math.min(combinations2D.length, 10); j++) {
+                    for (let k = 0; k < Math.min(combinations2D.length, 10); k++) {
+                        const combo4D = combinations2D[i] + combinations2D[j] + combinations2D[k];
+                        if (combo4D.length === 6) { // Ensure it's 6 digits (2+2+2)
+                            combinations4D.push(combo4D);
+                        }
+                        
+                        // Limit total combinations to prevent performance issues
+                        if (combinations4D.length >= 50) break;
+                    }
+                    if (combinations4D.length >= 50) break;
+                }
+                if (combinations4D.length >= 50) break;
+            }
+            
+            // Format for display with * separators
+            const formattedCombinations = combinations4D.slice(0, 10).map(combo => `*${combo}*`).join(' ');
+            const displayText = combinations4D.length > 10 ? 
+                `${formattedCombinations} +${combinations4D.length - 10} lagi` : 
+                formattedCombinations;
+            
+            // Raw format for copying
+            const rawText = combinations4D.map(combo => `*${combo}*`).join(' ');
+            
+            return {
+                formatted: displayText,
+                raw: rawText,
+                count: combinations4D.length,
+                combinations: combinations4D
+            };
+        }
+
+        // Fungsi untuk generate BBFS 5 digit dari angka yang kuat
+        function generateBBFS5Digit(numbers) {
+            if (!numbers || numbers.length === 0) return [];
+            
+            // Ambil digit unik dari semua angka
+            const allDigits = new Set();
+            numbers.forEach(num => {
+                num.toString().split('').forEach(digit => allDigits.add(digit));
+            });
+            
+            const uniqueDigits = [...allDigits].sort();
+            
+            // Jika digit kurang dari 5, return semua digit yang ada
+            if (uniqueDigits.length < 5) {
+                return [uniqueDigits];
+            }
+            
+            // Generate kombinasi 5 digit dari digit yang tersedia
+            const combinations = [];
+            
+            // Metode 1: Ambil 5 digit pertama berdasarkan frekuensi kemunculan
+            const digitFreq = {};
+            numbers.forEach(num => {
+                num.toString().split('').forEach(digit => {
+                    digitFreq[digit] = (digitFreq[digit] || 0) + 1;
+                });
+            });
+            
+            // Sort berdasarkan frekuensi (descending)
+            const sortedByFreq = uniqueDigits.sort((a, b) => (digitFreq[b] || 0) - (digitFreq[a] || 0));
+            
+            // Ambil 5 digit teratas
+            if (sortedByFreq.length >= 5) {
+                combinations.push(sortedByFreq.slice(0, 5));
+            }
+            
+            // Metode 2: Kombinasi berdasarkan posisi (jika ada lebih dari 5 digit)
+            if (uniqueDigits.length > 5) {
+                // Kombinasi alternatif: ambil digit dengan pola tertentu
+                const pattern1 = [];
+                const pattern2 = [];
+                
+                for (let i = 0; i < uniqueDigits.length && pattern1.length < 5; i += 2) {
+                    pattern1.push(uniqueDigits[i]);
+                }
+                
+                for (let i = 1; i < uniqueDigits.length && pattern2.length < 5; i += 2) {
+                    pattern2.push(uniqueDigits[i]);
+                }
+                
+                // Lengkapi jika kurang dari 5
+                while (pattern1.length < 5 && pattern1.length < uniqueDigits.length) {
+                    for (let digit of uniqueDigits) {
+                        if (!pattern1.includes(digit) && pattern1.length < 5) {
+                            pattern1.push(digit);
+                        }
+                    }
+                }
+                
+                while (pattern2.length < 5 && pattern2.length < uniqueDigits.length) {
+                    for (let digit of uniqueDigits) {
+                        if (!pattern2.includes(digit) && pattern2.length < 5) {
+                            pattern2.push(digit);
+                        }
+                    }
+                }
+                
+                if (pattern1.length === 5 && !combinations.some(c => JSON.stringify(c) === JSON.stringify(pattern1))) {
+                    combinations.push(pattern1);
+                }
+                if (pattern2.length === 5 && !combinations.some(c => JSON.stringify(c) === JSON.stringify(pattern2))) {
+                    combinations.push(pattern2);
+                }
+            }
+            
+            // Jika tidak ada kombinasi, return digit yang ada
+            if (combinations.length === 0) {
+                combinations.push(uniqueDigits.slice(0, Math.min(5, uniqueDigits.length)));
+            }
+            
+            return combinations;
+        }
+
+        // Fungsi untuk menyalin BBFS 5 digit
+        function copyBBFS5Digit(bbfs5DigitArray, button) {
+            let text = '';
+            bbfs5DigitArray.forEach((bbfs, index) => {
+                text += `Set ${index + 1}: ${bbfs.join('')}\n`;
+            });
+            
+            navigator.clipboard.writeText(text.trim()).then(function() {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Tersalin!';
+                button.classList.add('bg-green-600');
+                
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.classList.remove('bg-green-600');
+                }, 2000);
+            }).catch(function(err) {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = text.trim();
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Tersalin!';
+                button.classList.add('bg-green-600');
+                
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.classList.remove('bg-green-600');
+                }, 2000);
+            });
+        }
+
         // Fungsi untuk menampilkan angka yang tersisa
         function updateRemainingNumbersDisplay() {
             const remainingContainer = document.getElementById('remainingNumbers');
@@ -1256,5 +1722,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98979baf30d8fd93',t:'MTc1OTYxMTYyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9897eb4e141cd176',t:'MTc1OTYxNDg4MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
